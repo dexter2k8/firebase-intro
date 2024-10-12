@@ -9,7 +9,7 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { useState } from "react";
 import { toast } from "react-toastify";
-// import { useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import api from "@/services/api";
 
 interface ISignInProps {
@@ -20,19 +20,14 @@ interface ISignInProps {
 export default function SignIn() {
   const { main, container, head, item } = styles;
   const [loading, setLoading] = useState(false);
-  // const router = useRouter();
+  const router = useRouter();
   const { control, handleSubmit } = useForm<ISignInProps>({ resolver: yupResolver(schema) });
 
   const onSubmit: SubmitHandler<ISignInProps> = async ({ email, password }) => {
     try {
       setLoading(true);
       const response = await api.post("/api/sign-in", { email, password });
-
-      console.log("response: ", await response.data, response);
-
-      // if (response) {
-      //   router.replace("/dashboard");
-      // }
+      if (!!response?.data) router.replace("/dashboard");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       toast.error(error?.message);
