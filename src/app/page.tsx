@@ -1,8 +1,6 @@
 "use client";
 import styles from "./page.module.scss";
 import Logo from "../../public/assets/logo";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../services/firebase";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import schema from "@/schemas/validateLogin";
@@ -10,9 +8,9 @@ import Link from "next/link";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import { useState } from "react";
-import { FirebaseError } from "firebase/app";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
+import api from "@/services/api";
 
 interface ISignInProps {
   email: string;
@@ -22,18 +20,22 @@ interface ISignInProps {
 export default function SignIn() {
   const { main, container, head, item } = styles;
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  // const router = useRouter();
   const { control, handleSubmit } = useForm<ISignInProps>({ resolver: yupResolver(schema) });
 
   const onSubmit: SubmitHandler<ISignInProps> = async ({ email, password }) => {
     try {
       setLoading(true);
-      await signInWithEmailAndPassword(auth, email, password);
-      if (auth.currentUser) router.replace("/dashboard");
-    } catch (error) {
-      if (error instanceof FirebaseError) {
-        toast.error(error?.message);
-      }
+      const response = await api.post("/api/sign-in", { email, password });
+
+      console.log("response: ", await response.data, response);
+
+      // if (response) {
+      //   router.replace("/dashboard");
+      // }
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      toast.error(error?.message);
     }
     setLoading(false);
   };
