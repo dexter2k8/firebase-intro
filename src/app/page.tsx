@@ -1,95 +1,62 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+import styles from "./page.module.scss";
+import Logo from "../../public/assets/logo";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../services/firebase";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import schema from "@/schemas/validateLogin";
+import Link from "next/link";
+import Input from "@/components/Input";
+import Button from "@/components/Button";
+import { useState } from "react";
+import { FirebaseError } from "firebase/app";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
-export default function Home() {
+interface ISignInProps {
+  email: string;
+  password: string;
+}
+
+export default function SignIn() {
+  const { main, container, head, item } = styles;
+  const [loading, setLoading] = useState(false);
+  const router = useRouter();
+  const { control, handleSubmit } = useForm<ISignInProps>({ resolver: yupResolver(schema) });
+
+  const onSubmit: SubmitHandler<ISignInProps> = async ({ email, password }) => {
+    try {
+      setLoading(true);
+      await signInWithEmailAndPassword(auth, email, password);
+      if (auth.currentUser) router.replace("/dashboard");
+    } catch (error) {
+      if (error instanceof FirebaseError) {
+        toast.error(error?.message);
+      }
+    }
+    setLoading(false);
+  };
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>src/app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+    <main className={main}>
+      <form className={container} onSubmit={handleSubmit(onSubmit)}>
+        <div className={head}>
+          <Logo />
+          <span>Funds Explorer</span>
         </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+        <div className={item}>
+          <label htmlFor="password">Password</label>
+          <Input.Controlled control={control} name="email" id="email" />
+        </div>
+        <div className={item}>
+          <label htmlFor="password">Password</label>
+          <Input.Controlled control={control} name="password" id="password" type="password" />
+        </div>
+        <Button loading={loading} size="large" variant="primary">
+          Sign In
+        </Button>
+        <Link href="/sign-up">Create an account</Link>
+      </form>
+    </main>
   );
 }

@@ -1,0 +1,57 @@
+@mixin formItem($width) {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: $width;
+  label {
+    text-align: left;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+}
+
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+
+  .container {
+    background-color: var(--light);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 1rem;
+    height: 34rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
+    width: 100%;
+
+    .head {
+      display: flex;
+      align-items: flex-end;
+      gap: 0.5rem;
+      span {
+        font-size: 1.25rem;
+        font-weight: 600;
+        line-height: 1;
+      }
+    }
+
+    .item {
+      @include formItem(18rem);
+    }
+    button {
+      width: 18rem;
+    }
+
+    a {
+      color: var(--blue);
+    }
+  }
+}
