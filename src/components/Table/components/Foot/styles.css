@@ -1,0 +1,19 @@
+.ds-table__footer {
+  text-align: right;
+  padding: 16px;
+  user-select: none;
+}
+
+.ds-table__footer span:not(:last-child) {
+  margin-right: 2rem;
+}
+
+.ds-table__footer--arrow-true {
+  cursor: pointer;
+}
+
+.ds-table__footer--arrow-false {
+  cursor: default;
+  pointer-events: none;
+  opacity: 0.2;
+}

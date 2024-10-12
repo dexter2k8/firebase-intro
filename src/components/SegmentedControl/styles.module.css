@@ -1,0 +1,42 @@
+.controlList {
+  --left: 0;
+  --width: auto;
+
+  width: fit-content;
+  position: relative;
+  border-radius: 8px;
+  background-color: #e8eaf6;
+}
+
+.controlList[data-variant="secondary"] {
+  background-color: #fff;
+}
+
+.controlList::before {
+  content: "";
+  position: absolute;
+  background: #666;
+  width: calc(var(--width) - 8px);
+  transform: translateX(var(--left));
+  border-radius: 8px;
+  top: 4px;
+  bottom: 4px;
+  left: 4px;
+  z-index: 0;
+  transition: transform 0.3s ease, width 0.3s ease;
+}
+
+.controlItem {
+  position: relative;
+  display: inline-block;
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 8px;
+  z-index: 1;
+  user-select: none;
+  transition: color 0.5s ease;
+}
+
+.controlItem[data-active="true"] {
+  color: #fff;
+}

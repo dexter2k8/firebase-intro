@@ -1,0 +1,62 @@
+.ds-table__head {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #b0b0b0;
+  font-size: 12px;
+}
+
+@-moz-document url-prefix() {
+  .ds-table__head {
+    border-bottom-width: 2px; /* Firefox */
+    height: 3.75rem;
+  }
+}
+
+.ds-table__head--container {
+  display: flex;
+  align-items: center;
+  cursor: default;
+}
+
+.ds-table__head th {
+  padding-block: 16px;
+  padding-left: 16px;
+  white-space: nowrap;
+}
+
+.ds-table__head th span {
+  padding-inline: 2px;
+  font-size: 14px;
+}
+
+.ds-table__head--adjust {
+  padding-right: 16px;
+}
+
+.ds-table__head--left {
+  justify-content: flex-start;
+}
+
+.ds-table__head--right {
+  justify-content: flex-end;
+}
+
+.ds-table__head--center {
+  justify-content: center;
+}
+
+.ds-table__head--cursor {
+  cursor: pointer;
+  opacity: 0.2;
+}
+
+.ds-table__head--color {
+  color: blue;
+  opacity: 1;
+}
+
+.ds-table__head--filter {
+  cursor: pointer;
+}

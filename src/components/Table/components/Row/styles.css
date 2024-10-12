@@ -1,0 +1,38 @@
+.ds-table__row {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.ds-table__row:hover {
+  background-color: #f2f2f2;
+  transition: background-color 0.3s ease;
+}
+
+.ds-table__row--cursor {
+  cursor: pointer;
+}
+
+.ds-table__row--td {
+  white-space: nowrap;
+}
+
+.ds-table__row--label {
+  display: block;
+  padding: 16px;
+  white-space: nowrap;
+}
+
+.ds-table__row--selected {
+  background-color: #e5e7eb;
+}
+
+.ds-table__cell--center {
+  text-align: center;
+}
+
+.ds-table__cell--left {
+  text-align: left;
+}
+
+.ds-table__cell--right {
+  text-align: right;
+}

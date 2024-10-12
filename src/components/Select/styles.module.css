@@ -1,0 +1,121 @@
+.container > ::-webkit-scrollbar {
+  width: 0.6rem;
+  height: 0.4rem;
+}
+
+.container > ::-webkit-scrollbar-thumb {
+  background-color: #d9d9d9;
+  border-radius: 0.25rem;
+}
+
+.container {
+  position: relative;
+  width: 100%;
+  min-width: 0; /* for content not exceed width */
+}
+
+.select {
+  box-sizing: border-box;
+  position: relative;
+  display: flex;
+  align-items: center;
+  font-size: 0.8rem;
+  border: 0.0625rem solid #d9d9d9;
+  border-radius: 0.375rem;
+  height: 2rem;
+  padding-inline: 0.75rem;
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.select:hover {
+  border-color: #b6b6b6;
+}
+
+.select[data-type="search"] {
+  padding-inline: 0;
+}
+
+.select[data-open="true"] {
+  box-shadow: 0 0 0 2px rgba(119, 119, 119, 0.1);
+}
+
+.select[data-type="default"]::after {
+  content: "";
+  position: absolute;
+  top: 0.7rem;
+  right: 0.75rem;
+  width: 0.3rem;
+  height: 0.3rem;
+  border-bottom: 0.1rem solid #666;
+  border-right: 0.1rem solid #666;
+  transform: rotate(45deg);
+  transition: all 0.2s ease;
+}
+
+.select[data-open="true"]::after {
+  transform: rotate(-135deg);
+  top: 0.8rem;
+}
+.input::placeholder,
+.select[data-placeholder="true"] {
+  color: #b6b6b6;
+}
+
+.input {
+  width: 100%;
+  height: 100%;
+  padding-inline: 0.75rem;
+  font: inherit;
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+
+.input::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
+.options {
+  list-style: none;
+  position: fixed;
+  margin-block: 0.2rem;
+  padding-inline-start: 0;
+  font-size: 0.8rem;
+  width: var(--width);
+  border: 0.0625rem solid #ccc;
+  border-radius: 0.375rem;
+  background-color: #fff;
+  overflow: hidden auto;
+  max-height: 15rem;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.2s ease;
+}
+
+.options[data-open="true"] {
+  visibility: visible;
+  opacity: 1;
+  z-index: 1;
+}
+
+.options[data-empty="true"] {
+  opacity: 0;
+}
+
+.option {
+  padding: 0.25rem 0.75rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.option[data-selected="true"] {
+  background-color: #d9d9d9;
+}
+
+.option:hover {
+  background-color: #eee;
+}

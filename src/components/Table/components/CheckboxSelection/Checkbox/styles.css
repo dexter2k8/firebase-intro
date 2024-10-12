@@ -1,0 +1,23 @@
+.ds-checkbox-indeterminate {
+  appearance: none;
+  position: relative;
+  background-color: #323232;
+  border-radius: 4px;
+  margin-bottom: 0;
+}
+
+.ds-checkbox {
+  accent-color: #323232;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+
+.ds-checkbox-indeterminate::after {
+  content: "─";
+  color: #fff;
+  position: absolute;
+  transform: translateY(0);
+  -moz-transform: translateY(-1px); /* Firefox */
+  left: 3px;
+}

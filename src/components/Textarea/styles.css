@@ -1,0 +1,24 @@
+.dx-textarea-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.dx-textarea {
+  box-sizing: border-box;
+  font-family: inherit;
+  padding: 0.4rem;
+  width: 100%;
+  border-color: #d9d9d9;
+  border-radius: 0.5rem;
+  outline: none;
+  transition: 0.3s ease all;
+}
+
+.dx-textarea:focus,
+.dx-textarea:hover {
+  box-shadow: 0 0 0 2px rgba(119, 119, 119, 0.1);
+}
+
+.dx-textarea:hover {
+  border-color: #b6b6b6;
+}

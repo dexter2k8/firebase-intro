@@ -1,0 +1,114 @@
+.ds-button {
+  font-family: inherit;
+  border: 1px solid #d9d9d9;
+  background-color: #fff;
+  padding-inline: 1rem;
+  padding-block: 0.4rem;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.ds-button-loading {
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.4;
+}
+
+.ds-button:not(:disabled):hover {
+  border-color: #1677ff;
+  color: #1677ff;
+}
+
+.ds-button-primary {
+  background: #666;
+  border-color: #666;
+}
+
+.ds-button-primary p,
+.ds-button-primary:not(:disabled):hover p {
+  color: #fff;
+}
+
+.ds-button-primary:not(:disabled):hover {
+  background: #777;
+  border-color: #777;
+  color: #fff;
+}
+
+.ds-button-link {
+  background: transparent;
+  border-color: transparent;
+  color: #1677ff;
+}
+
+.ds-button-link:not(:disabled):hover {
+  background: transparent;
+  border-color: transparent;
+  color: #4096ff;
+}
+
+.ds-button-small {
+  padding-block: 0.16rem;
+  border-radius: 0.25rem;
+}
+
+.ds-button-large {
+  padding-block: 0.6rem;
+}
+
+.ds-button:disabled {
+  cursor: not-allowed;
+}
+
+.ds-button:focus {
+  animation: pulse 0.5s;
+}
+
+.ds-button:active {
+  animation: none;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(119, 119, 119, 0.7);
+  }
+
+  99% {
+    box-shadow: 0 0 0 5px rgba(119, 119, 119, 0);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(119, 119, 119, 0);
+  }
+}
+
+.ds-loading {
+  position: relative;
+  width: 20px;
+}
+
+.ds-loading span {
+  position: absolute;
+  right: 0;
+  top: -10px;
+  border: 2px solid #666;
+  border-radius: 50%;
+  border-top: 2px solid #f3f3f3;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
