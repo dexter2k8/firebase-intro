@@ -11,8 +11,9 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import api from "@/services/api";
+import { API } from "@/utils/paths";
 
-interface ISignInProps {
+export interface ISignInProps {
   email: string;
   password: string;
 }
@@ -26,7 +27,8 @@ export default function SignIn() {
   const onSubmit: SubmitHandler<ISignInProps> = async ({ email, password }) => {
     try {
       setLoading(true);
-      const response = await api.post("/api/sign-in", { email, password });
+      const response = await api.post(API.SIGN_IN, { email, password });
+
       if (!!response?.data) router.replace("/dashboard");
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {

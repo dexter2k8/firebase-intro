@@ -1,7 +1,6 @@
 import * as yup from "yup";
 
 const schema = yup.object({
-  name: yup.string().required("Name is required"),
   email: yup.string().required("Email is required").email("Must be a valid email"),
   password: yup
     .string()
@@ -12,7 +11,6 @@ const schema = yup.object({
     .string()
     .required("Confirm password is required")
     .oneOf([yup.ref("password")], "Passwords must match"),
-  avatar: yup.string().optional(),
 });
 
 export default schema;
