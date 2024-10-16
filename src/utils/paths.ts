@@ -1,5 +1,9 @@
 export const API = {
-  SIGN_IN: "/api/sign-in",
-  GET_CURRENT_USER: "/api/get-current-user",
-  VERIFY_TOKEN: "/api/verify-token",
+  AUTH: {
+    SIGN_IN: "/api/auth/sign-in",
+    SIGN_UP: "/api/auth/sign-up",
+    SIGN_OUT: "/api/auth/sign-out",
+    GET_USER: "/api/auth/get-user",
+    VERIFY_TOKEN: "/api/auth/verify-token",
+  },
 };

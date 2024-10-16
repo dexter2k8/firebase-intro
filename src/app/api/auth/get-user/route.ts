@@ -1,9 +1,10 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
-import type { IFirebaseUser, IGetCurrentUser } from "./types";
+import type { IFirebaseUser } from "./types";
+import type { IGetCurrentUser } from "@/store/useAuth/types";
 
-export async function POST() {
+export async function GET() {
   const token = cookies().get("funds-explorer-token")?.value;
   if (!token) {
     return NextResponse.json({ error: "Token não fornecido." }, { status: 400 });
@@ -18,6 +19,7 @@ export async function POST() {
     name: result.name,
     email: result.email,
     avatar: result.picture,
+    uid: result.user_id,
   };
 
   return NextResponse.json(user, { status: 200 });

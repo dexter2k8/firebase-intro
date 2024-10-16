@@ -2,7 +2,7 @@ import Link from "next/link";
 import { MdDashboard, MdLogout, MdOutlineSettings, MdOutlineTableChart } from "react-icons/md";
 import Logo from "../../../../../public/assets/logo";
 import styles from "./styles.module.scss";
-import { auth } from "@/services/firebase";
+import { useAuth } from "@/store/useAuth";
 
 const sidebarItems = [
   { label: "Dashboard", value: "/dashboard", icon: <MdDashboard /> },
@@ -17,15 +17,7 @@ interface ISidebarProps {
 
 export default function Sidebar({ collapsed, pathname }: ISidebarProps) {
   const { sidebar, head, items, foot } = styles;
-
-  const handleSignOut = async () => {
-    try {
-      await auth.signOut();
-      window.location.href = "/";
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const { signOut } = useAuth();
 
   return (
     <nav className={sidebar} data-collapsed={collapsed}>
@@ -48,7 +40,7 @@ export default function Sidebar({ collapsed, pathname }: ISidebarProps) {
       </ul>
 
       <div className={foot}>
-        <Link href="/" onClick={handleSignOut}>
+        <Link href="/" onClick={signOut}>
           <MdLogout />
           <span>Logout</span>
         </Link>

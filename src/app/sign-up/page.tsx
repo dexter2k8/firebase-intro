@@ -6,27 +6,22 @@ import { useForm } from "react-hook-form";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import schema from "@/schemas/validateSignUp";
+import { useAuth } from "@/store/useAuth";
 import Logo from "../../../public/assets/logo";
 import styles from "../page.module.scss";
 import type { SubmitHandler } from "react-hook-form";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/services/firebase";
-import type { ISignInProps } from "../page";
-
-interface ISignUpProps extends ISignInProps {
-  confirmPassword: string;
-}
+import type { ISignUpProps } from "@/store/useAuth/types";
 
 export default function SignUp() {
   const { main, container, head, item } = styles;
+  const { signUp } = useAuth();
   const router = useRouter();
   const { control, handleSubmit } = useForm<ISignUpProps>({
     resolver: yupResolver(schema),
   });
 
   const onSubmit: SubmitHandler<ISignUpProps> = async (data) => {
-    await createUserWithEmailAndPassword(auth, data.email, data.password);
-    if (auth.currentUser) router.push("/");
+    if (await signUp(data)) router.push("/");
   };
 
   return (
@@ -35,6 +30,10 @@ export default function SignUp() {
         <div className={head}>
           <Logo />
           <span>Funds Explorer</span>
+        </div>
+        <div className={item}>
+          <label htmlFor="name">Name</label>
+          <Input.Controlled control={control} name="name" id="name" />
         </div>
         <div className={item}>
           <label htmlFor="email">Email</label>
@@ -58,6 +57,10 @@ export default function SignUp() {
             id="confirmPassword"
             type="password"
           />
+        </div>
+        <div className={item}>
+          <label htmlFor="avatar">Avatar URL (optional)</label>
+          <Input.Controlled control={control} name="avatar" id="avatar" />
         </div>
         <Button size="large" variant="primary">
           Create account

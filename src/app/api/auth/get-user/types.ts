@@ -19,9 +19,3 @@ export interface IFirebaseUser {
   user_id: string;
   token: string;
 }
-
-export interface IGetCurrentUser {
-  name: string;
-  email: string;
-  avatar: string;
-}

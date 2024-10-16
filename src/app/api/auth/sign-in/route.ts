@@ -7,14 +7,14 @@ import { auth } from "@/services/firebase";
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { email, password, displayName, photoURL } = body;
+    const { email, password, name, avatar } = body;
 
     await signInWithEmailAndPassword(auth, email, password);
     if (auth.currentUser) {
-      if (displayName && photoURL) {
+      if (name && avatar) {
         updateProfile(auth.currentUser, {
-          displayName: displayName,
-          photoURL: photoURL,
+          displayName: name,
+          photoURL: avatar,
         });
       }
       const token = await auth.currentUser.getIdToken();
