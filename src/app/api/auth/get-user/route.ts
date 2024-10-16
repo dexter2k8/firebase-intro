@@ -6,13 +6,11 @@ import type { IGetCurrentUser } from "@/store/useAuth/types";
 
 export async function GET() {
   const token = cookies().get("funds-explorer-token")?.value;
-  if (!token) {
-    return NextResponse.json({ error: "Token não fornecido." }, { status: 400 });
-  }
+  if (!token) return NextResponse.json({ message: "Token não fornecido." }, { status: 400 });
 
-  const result = jwt.decode(token as string) as IFirebaseUser | null;
+  const result = jwt.decode(token) as IFirebaseUser | null;
   if (result === null) {
-    return NextResponse.json({ error: "Invalid token" }, { status: 401 });
+    return NextResponse.json({ message: "Invalid token" }, { status: 401 });
   }
 
   const user: IGetCurrentUser = {
