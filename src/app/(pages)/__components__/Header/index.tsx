@@ -4,6 +4,7 @@ import styles from "./styles.module.scss";
 import { useEffect, useState } from "react";
 import Skeleton from "@/components/Skeleton";
 import { useAuth } from "@/store/useAuth";
+import { IGetCurrentUser } from "@/store/useAuth/types";
 
 interface IHeaderProps {
   menuClick: () => void;
@@ -12,14 +13,16 @@ interface IHeaderProps {
 
 export default function Header({ menuClick, label }: IHeaderProps) {
   const { header, menu, title, content } = styles;
-  const { getUser, user, setValue } = useAuth();
+  const { getUser, setValue } = useAuth();
+  const [user, setUser] = useState<IGetCurrentUser | null>(null);
 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const getUserData = async () => {
       const userData = await getUser();
-      setValue("user", userData);
+      setValue("userId", userData?.uid);
+      setUser(userData);
       setLoading(false);
     };
     getUserData();

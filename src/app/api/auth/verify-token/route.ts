@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import jwt, { JwtPayload } from "jsonwebtoken";
-import moment from "moment";
 import { auth } from "@/services/firebase";
+import { onIdTokenChanged } from "firebase/auth";
 
 const validKids = [
   "718f4df92ad175f6a0307ab65d8f67f054fa1e5f",
@@ -19,11 +19,26 @@ export async function GET() {
       return NextResponse.json({ message: "Invalid token" }, { status: 401 });
     }
 
-    const current = moment();
-    const exp = moment.unix(decoded?.payload.exp);
-    if (current.isAfter(exp)) {
-      const newToken = auth.currentUser?.getIdToken(true);
-      console.log("NEW TOKEN", newToken);
+    const authenticated = await new Promise<boolean>((resolve) => {
+      onIdTokenChanged(auth, async (user) => {
+        if (user) {
+          const newToken = await user.getIdToken();
+          cookies().set({
+            name: "funds-explorer-token",
+            value: newToken,
+            httpOnly: true,
+            maxAge: 60 * 60, // 1 hour
+            path: "/",
+          });
+          resolve(true); // Usuário autenticado
+        } else {
+          resolve(false); // Nenhum usuário autenticado
+        }
+      });
+    });
+
+    if (!authenticated) {
+      return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
     }
 
     return NextResponse.json(true, { status: 200 });

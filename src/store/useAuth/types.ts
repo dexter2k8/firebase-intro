@@ -7,7 +7,7 @@ export type TActions = {
 };
 
 export type TState = {
-  user?: IGetCurrentUser;
+  userId?: string;
 };
 
 export interface ISignInProps {

@@ -1,7 +1,12 @@
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import {
+  setPersistence,
+  browserLocalPersistence,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 import { auth } from "@/services/firebase";
 
 export async function POST(request: NextRequest) {
@@ -10,20 +15,24 @@ export async function POST(request: NextRequest) {
     const { email, password, name, avatar } = body;
 
     await signInWithEmailAndPassword(auth, email, password);
+    //setPersistence force browser to keep the session active when you reload page
+    // you can choose between browserLocalPersistence and browserSessionPersistence
+    await setPersistence(auth, browserLocalPersistence);
+
     if (auth.currentUser) {
-      if (name && avatar) {
+      if (name) {
         updateProfile(auth.currentUser, {
           displayName: name,
           photoURL: avatar,
         });
       }
-      const token = await auth.currentUser.getIdToken();
 
+      const token = await auth.currentUser.getIdToken();
       cookies().set({
         name: "funds-explorer-token",
         value: token,
         httpOnly: true,
-        maxAge: 60 * 60 * 24 * 30, // 30 days
+        maxAge: 60 * 60, // 1 hour
         path: "/",
       });
     }
