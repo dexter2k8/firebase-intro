@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { auth } from "@/services/firebase";
@@ -9,14 +9,15 @@ const validKids = [
   "8d9befd3effcbbc82c83ad0c972c8ea978f6f137",
 ];
 
-export async function GET() {
-  const token = cookies().get("funds-explorer-token")?.value;
-  if (!token) return NextResponse.json({ message: "Token not found." }, { status: 400 });
+export async function POST(req: NextRequest) {
+  const body = await req.json();
+  const { token } = body;
+  if (!token) return NextResponse.json(false, { status: 200 });
 
   try {
     const decoded = jwt.decode(token, { complete: true }) as JwtPayload;
     if (!decoded?.header.kid || !validKids.includes(decoded?.header.kid)) {
-      return NextResponse.json({ message: "Invalid token" }, { status: 401 });
+      return NextResponse.json(false, { status: 200 });
     }
 
     const authenticated = await new Promise<boolean>((resolve) => {
@@ -27,7 +28,7 @@ export async function GET() {
             name: "funds-explorer-token",
             value: newToken,
             httpOnly: true,
-            maxAge: 60 * 60, // 1 hour
+            maxAge: 60 * 60 * 24, // 1 day
             path: "/",
           });
           resolve(true); // Usuário autenticado
@@ -37,11 +38,7 @@ export async function GET() {
       });
     });
 
-    if (!authenticated) {
-      return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
-    }
-
-    return NextResponse.json(true, { status: 200 });
+    return NextResponse.json(authenticated, { status: 200 });
   } catch (error) {
     console.error("Erro ao verificar token de App Check:", error);
     return NextResponse.json({ message: "Falha ao verificar o token." }, { status: 500 });

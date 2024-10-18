@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
         name: "funds-explorer-token",
         value: token,
         httpOnly: true,
-        maxAge: 60 * 60, // 1 hour
+        maxAge: 60 * 60 * 24, // 1 day
         path: "/",
       });
     }
