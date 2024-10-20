@@ -1,20 +1,23 @@
 import { AxiosError } from "axios";
+import type { NextRequest } from "next/server";
+// import type { IResponse } from "../types";
 import { db } from "@/services/firebase";
-import { collection, getDocs } from "firebase/firestore";
-import { IFunds } from "./types";
+import { collection, doc, setDoc } from "firebase/firestore";
+import { IPostFund } from "./types";
 
-export async function GET() {
+export async function POST(req: NextRequest) {
+  const body: IPostFund = await req.json();
+  const { alias, ...rest } = body;
+
   try {
     // const token = cookies().get("funds-explorer-token")?.value;
     // if (!token) return Response.json("Token not found", { status: 401 });
 
     const fundsRef = collection(db, "funds");
-    const response = await getDocs(fundsRef);
+    const newFundRef = doc(fundsRef, alias);
+    await setDoc(newFundRef, { ...rest });
 
-    const data = response.docs.map((doc) => ({ ...doc.data(), alias: doc.id })) as IFunds[];
-    const count = data.length;
-
-    return Response.json({ data, count }, { status: 200 });
+    return Response.json("Fund created successfully", { status: 200 });
   } catch (error) {
     if (error instanceof AxiosError) {
       return Response.json(error.response?.data.message, { status: error.response?.status });

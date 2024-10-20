@@ -9,5 +9,8 @@ export const API = {
   GET_SCRAPE: "/api/analytics/get-scrape",
   FUNDS: {
     GET_FUNDS: "/api/funds/get-funds",
+    POST_FUND: "/api/funds/post-fund",
+    PATCH_FUND: "/api/funds/patch-fund/",
+    DELETE_FUND: "/api/funds/delete-fund/",
   },
 };

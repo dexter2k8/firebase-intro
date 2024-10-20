@@ -1,20 +1,20 @@
 import { AxiosError } from "axios";
+import type { NextRequest } from "next/server";
+// import type { IResponse } from "../types";
 import { db } from "@/services/firebase";
-import { collection, getDocs } from "firebase/firestore";
-import { IFunds } from "./types";
+import { doc, deleteDoc } from "firebase/firestore";
 
-export async function GET() {
+export async function DELETE(req: NextRequest) {
   try {
     // const token = cookies().get("funds-explorer-token")?.value;
     // if (!token) return Response.json("Token not found", { status: 401 });
 
-    const fundsRef = collection(db, "funds");
-    const response = await getDocs(fundsRef);
+    const alias = req.nextUrl.pathname.split("/").pop() ?? "";
 
-    const data = response.docs.map((doc) => ({ ...doc.data(), alias: doc.id })) as IFunds[];
-    const count = data.length;
+    const fundRef = doc(db, "funds", alias);
+    await deleteDoc(fundRef);
 
-    return Response.json({ data, count }, { status: 200 });
+    return Response.json("Fund deleted", { status: 200 });
   } catch (error) {
     if (error instanceof AxiosError) {
       return Response.json(error.response?.data.message, { status: error.response?.status });
