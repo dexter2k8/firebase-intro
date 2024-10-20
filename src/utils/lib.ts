@@ -1,5 +1,6 @@
 import type { FactoryArg } from "imask";
 import moment from "moment";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 export const formatCurrency = (value: number) => {
   return value.toLocaleString("pt-BR", {
@@ -67,4 +68,25 @@ export function formatBRL(value: string) {
     value: formatted,
     raw: raw,
   };
+}
+
+const validKids = [
+  "718f4df92ad175f6a0307ab65d8f67f054fa1e5f",
+  "8d9befd3effcbbc82c83ad0c972c8ea978f6f137",
+];
+export function isValidToken(token?: string): boolean {
+  if (!token) return false;
+
+  const decoded = jwt.decode(token, { complete: true }) as JwtPayload;
+  if (!decoded?.header.kid || !validKids.includes(decoded?.header.kid)) {
+    return false;
+  }
+
+  const current = moment();
+  const exp = moment.unix(decoded?.payload.exp);
+  if (current.isAfter(exp)) {
+    return false;
+  }
+
+  return true;
 }

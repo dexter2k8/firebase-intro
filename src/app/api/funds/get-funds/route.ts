@@ -2,11 +2,13 @@ import { AxiosError } from "axios";
 import { db } from "@/services/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import { IFunds } from "./types";
+import { cookies } from "next/headers";
+import { isValidToken } from "@/utils/lib";
 
 export async function GET() {
   try {
-    // const token = cookies().get("funds-explorer-token")?.value;
-    // if (!token) return Response.json("Token not found", { status: 401 });
+    const token = cookies().get("funds-explorer-token")?.value;
+    if (!isValidToken(token)) return Response.json("Invalid token", { status: 401 });
 
     const fundsRef = collection(db, "funds");
     const response = await getDocs(fundsRef);
