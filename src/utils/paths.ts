@@ -6,4 +6,8 @@ export const API = {
     GET_USER: "/api/auth/get-user",
     VERIFY_TOKEN: "/api/auth/verify-token",
   },
+  GET_SCRAPE: "/api/analytics/get-scrape",
+  FUNDS: {
+    GET_FUNDS: "/api/funds/get-funds",
+  },
 };

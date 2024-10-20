@@ -1,0 +1,32 @@
+.card {
+  display: flex;
+  align-items: flex-end;
+  background-color: var(--light);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  .title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  span {
+    font-weight: 600;
+    font-size: 2rem;
+  }
+  .diff {
+    display: flex;
+    margin-bottom: 0.5rem;
+    small {
+      margin-left: -0.25rem;
+    }
+  }
+}
+
+@media (max-width: 1020px) {
+  .card {
+    span {
+      font-size: 1.75rem;
+    }
+  }
+}
