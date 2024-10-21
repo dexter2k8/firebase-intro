@@ -13,4 +13,10 @@ export const API = {
     PATCH_FUND: "/api/funds/patch-fund/",
     DELETE_FUND: "/api/funds/delete-fund/",
   },
+  TRANSACTIONS: {
+    GET_TRANSACTIONS: "/api/transactions/get-transactions",
+    POST_TRANSACTION: "/api/transactions/post-transaction",
+    PATCH_TRANSACTION: "/api/transactions/patch-transaction/",
+    DELETE_TRANSACTION: "/api/transactions/delete-transaction/",
+  },
 };

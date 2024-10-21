@@ -6,8 +6,3 @@ export interface IFunds {
   type: TFundType;
   description?: string;
 }
-
-export interface IFundsResponse {
-  data: IFunds[];
-  count: number;
-}
