@@ -1,7 +1,7 @@
-import api from "@/services/api";
-import { ISignInProps, ISignUpProps } from "./types";
-import { API } from "@/utils/paths";
 import { toast } from "react-toastify";
+import api from "@/services/api";
+import { API } from "@/utils/paths";
+import type { ISignInProps, ISignUpProps } from "./types";
 
 async function SignIn({ email, password, name, avatar }: ISignInProps) {
   try {

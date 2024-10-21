@@ -1,7 +1,8 @@
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
+import { AxiosError } from "axios";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { NextResponse } from "next/server";
 import { auth } from "@/services/firebase";
+import type { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
@@ -20,6 +21,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(auth.currentUser, { status: 200 });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
+    if (error instanceof AxiosError) {
+      return Response.json(error.response?.data.message, { status: error.response?.status });
+    }
     if (error) return NextResponse.json({ message: error?.code as string }, { status: 401 });
+    return Response.json("Internal Server Error", { status: 500 });
   }
 }

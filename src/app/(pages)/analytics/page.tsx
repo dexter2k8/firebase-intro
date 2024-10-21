@@ -1,8 +1,8 @@
-import styles from "./styles.module.scss";
 import { AiFillDollarCircle } from "react-icons/ai";
 import { FaArrowTrendUp, FaArrowUpRightDots } from "react-icons/fa6";
 import { RiExchangeFundsFill } from "react-icons/ri";
 import Card from "../dashboard/__components__/Card";
+import styles from "./styles.module.scss";
 
 export default function Analytics() {
   const {

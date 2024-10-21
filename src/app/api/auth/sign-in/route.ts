@@ -1,13 +1,14 @@
-import type { NextRequest } from "next/server";
-import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { AxiosError } from "axios";
 import {
-  setPersistence,
   browserLocalPersistence,
+  setPersistence,
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
+import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 import { auth } from "@/services/firebase";
+import type { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
   try {
@@ -37,8 +38,10 @@ export async function POST(request: NextRequest) {
       });
     }
     return NextResponse.json(auth.currentUser, { status: 200 });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    if (error) return NextResponse.json({ message: error?.code as string }, { status: 401 });
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return NextResponse.json(error.response?.data.message, { status: error.response?.status });
+    }
+    return NextResponse.json("Internal Server Error", { status: 500 });
   }
 }

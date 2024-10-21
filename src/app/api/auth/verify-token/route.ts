@@ -1,8 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import { auth } from "@/services/firebase";
 import { onIdTokenChanged } from "firebase/auth";
+import jwt from "jsonwebtoken";
+import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
+import { auth } from "@/services/firebase";
+import type { JwtPayload } from "jsonwebtoken";
+import type { NextRequest } from "next/server";
 
 const validKids = [
   "718f4df92ad175f6a0307ab65d8f67f054fa1e5f",

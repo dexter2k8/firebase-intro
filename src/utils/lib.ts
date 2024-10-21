@@ -1,6 +1,7 @@
-import type { FactoryArg } from "imask";
+import jwt from "jsonwebtoken";
 import moment from "moment";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import type { FactoryArg } from "imask";
+import type { JwtPayload } from "jsonwebtoken";
 
 export const formatCurrency = (value: number) => {
   return value.toLocaleString("pt-BR", {

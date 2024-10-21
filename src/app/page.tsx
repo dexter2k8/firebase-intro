@@ -1,15 +1,16 @@
 "use client";
+import { useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import Button from "@/components/Button";
+import Input from "@/components/Input";
+import schema from "@/schemas/validateLogin";
+import { useAuth } from "@/store/useAuth";
 import styles from "./page.module.scss";
 import Logo from "../../public/assets/logo";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import schema from "@/schemas/validateLogin";
-import Link from "next/link";
-import Input from "@/components/Input";
-import Button from "@/components/Button";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useAuth } from "@/store/useAuth";
+import type { SubmitHandler } from "react-hook-form";
 
 export interface ISignInProps {
   email: string;

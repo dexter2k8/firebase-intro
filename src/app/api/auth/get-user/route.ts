@@ -1,8 +1,9 @@
+import { AxiosError } from "axios";
+import { onAuthStateChanged } from "firebase/auth";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import type { IGetCurrentUser } from "@/store/useAuth/types";
-import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/services/firebase";
+import type { IGetCurrentUser } from "@/store/useAuth/types";
 
 export async function GET() {
   const token = cookies().get("funds-explorer-token")?.value;
@@ -30,9 +31,10 @@ export async function GET() {
     };
 
     return NextResponse.json(user, { status: 200 });
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  } catch (error: any) {
-    return NextResponse.json({ message: error?.code as string }, { status: 401 });
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return NextResponse.json(error.response?.data.message, { status: error.response?.status });
+    }
+    return NextResponse.json("Internal Server Error", { status: 500 });
   }
 }

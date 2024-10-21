@@ -1,10 +1,10 @@
-import { MdMenu } from "react-icons/md";
-import UserDetails from "../UserDetails";
-import styles from "./styles.module.scss";
 import { useEffect, useState } from "react";
+import { MdMenu } from "react-icons/md";
 import Skeleton from "@/components/Skeleton";
 import { useAuth } from "@/store/useAuth";
-import { IGetCurrentUser } from "@/store/useAuth/types";
+import UserDetails from "../UserDetails";
+import styles from "./styles.module.scss";
+import type { IGetCurrentUser } from "@/store/useAuth/types";
 
 interface IHeaderProps {
   menuClick: () => void;

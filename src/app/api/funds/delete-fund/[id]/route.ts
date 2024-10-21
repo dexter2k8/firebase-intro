@@ -1,9 +1,9 @@
 import { AxiosError } from "axios";
-import type { NextRequest } from "next/server";
-import { db } from "@/services/firebase";
-import { doc, deleteDoc } from "firebase/firestore";
+import { deleteDoc, doc } from "firebase/firestore";
 import { cookies } from "next/headers";
+import { db } from "@/services/firebase";
 import { isValidToken } from "@/utils/lib";
+import type { NextRequest } from "next/server";
 
 export async function DELETE(req: NextRequest) {
   try {
