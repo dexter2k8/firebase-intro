@@ -11,10 +11,11 @@ export async function POST(req: NextRequest) {
 
   try {
     const token = cookies().get("funds-explorer-token")?.value;
-    if (!validateUser(token)) return NextResponse.json("Invalid token", { status: 401 });
+    const uid = validateUser(token);
+    if (!uid) return NextResponse.json("Invalid token", { status: 401 });
 
     const incomesRef = collection(db, "incomes");
-    await addDoc(incomesRef, { ...body });
+    await addDoc(incomesRef, { ...body, user_id: uid });
 
     return NextResponse.json("Fund created successfully", { status: 200 });
   } catch (error) {

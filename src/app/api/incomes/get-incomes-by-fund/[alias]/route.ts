@@ -10,12 +10,13 @@ import type { IIncome } from "../../get-incomes/types";
 export async function GET(req: NextRequest) {
   try {
     const token = cookies().get("funds-explorer-token")?.value;
-    if (!validateUser(token)) return NextResponse.json("Invalid token", { status: 401 });
+    const uid = validateUser(token);
+    if (!uid) return NextResponse.json("Invalid token", { status: 401 });
 
     const alias = req.nextUrl.pathname.split("/").pop() ?? "";
 
     const incomesRef = collection(db, "incomes");
-    const q = query(incomesRef, where("fund_alias", "==", alias));
+    const q = query(incomesRef, where("fund_alias", "==", alias), where("user_id", "==", uid));
     const response = await getDocs(q);
 
     const data = response?.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as IIncome[];
