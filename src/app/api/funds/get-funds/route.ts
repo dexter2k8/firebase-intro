@@ -3,13 +3,13 @@ import { collection, getDocs } from "firebase/firestore";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { db } from "@/services/firebase";
-import { isValidToken } from "@/utils/lib";
+import { validateUser } from "@/utils/lib";
 import type { IFunds } from "./types";
 
 export async function GET() {
   try {
     const token = cookies().get("funds-explorer-token")?.value;
-    if (!isValidToken(token)) return NextResponse.json("Invalid token", { status: 401 });
+    if (!validateUser(token)) return NextResponse.json("Invalid token", { status: 401 });
 
     const fundsRef = collection(db, "funds");
     const response = await getDocs(fundsRef);

@@ -75,19 +75,19 @@ const validKids = [
   "718f4df92ad175f6a0307ab65d8f67f054fa1e5f",
   "8d9befd3effcbbc82c83ad0c972c8ea978f6f137",
 ];
-export function isValidToken(token?: string): boolean {
-  if (!token) return false;
+export function validateUser(token?: string): string | undefined {
+  if (!token) return undefined;
 
   const decoded = jwt.decode(token, { complete: true }) as JwtPayload;
   if (!decoded?.header.kid || !validKids.includes(decoded?.header.kid)) {
-    return false;
+    return undefined;
   }
 
   const current = moment();
   const exp = moment.unix(decoded?.payload.exp);
   if (current.isAfter(exp)) {
-    return false;
+    return undefined;
   }
 
-  return true;
+  return decoded?.payload.user_id;
 }

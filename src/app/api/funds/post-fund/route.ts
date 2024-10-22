@@ -3,7 +3,7 @@ import { collection, doc, setDoc } from "firebase/firestore";
 import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 import { db } from "@/services/firebase";
-import { isValidToken } from "@/utils/lib";
+import { validateUser } from "@/utils/lib";
 import type { IPostFund } from "./types";
 
 export async function POST(req: NextRequest) {
@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
 
   try {
     const token = cookies().get("funds-explorer-token")?.value;
-    if (!isValidToken(token)) return NextResponse.json("Invalid token", { status: 401 });
+    if (!validateUser(token)) return NextResponse.json("Invalid token", { status: 401 });
 
     const fundsRef = collection(db, "funds");
     const newFundRef = doc(fundsRef, alias);

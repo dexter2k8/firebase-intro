@@ -3,14 +3,14 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { db } from "@/services/firebase";
-import { isValidToken } from "@/utils/lib";
+import { validateUser } from "@/utils/lib";
 import type { NextRequest } from "next/server";
 import type { IIncome } from "../../get-incomes/types";
 
 export async function GET(req: NextRequest) {
   try {
     const token = cookies().get("funds-explorer-token")?.value;
-    if (!isValidToken(token)) return NextResponse.json("Invalid token", { status: 401 });
+    if (!validateUser(token)) return NextResponse.json("Invalid token", { status: 401 });
 
     const alias = req.nextUrl.pathname.split("/").pop() ?? "";
 

@@ -2,13 +2,13 @@ import { AxiosError } from "axios";
 import { deleteDoc, doc } from "firebase/firestore";
 import { cookies } from "next/headers";
 import { db } from "@/services/firebase";
-import { isValidToken } from "@/utils/lib";
+import { validateUser } from "@/utils/lib";
 import type { NextRequest } from "next/server";
 
 export async function DELETE(req: NextRequest) {
   try {
     const token = cookies().get("funds-explorer-token")?.value;
-    if (!isValidToken(token)) return Response.json("Invalid token", { status: 401 });
+    if (!validateUser(token)) return Response.json("Invalid token", { status: 401 });
 
     const alias = req.nextUrl.pathname.split("/").pop() ?? "";
 

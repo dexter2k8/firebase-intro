@@ -3,19 +3,20 @@ import { collection, getDocs, query, where } from "firebase/firestore";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { db } from "@/services/firebase";
-import { isValidToken } from "@/utils/lib";
+import { validateUser } from "@/utils/lib";
 import type { NextRequest } from "next/server";
 import type { ITransaction } from "../../get-transactions/types";
 
 export async function GET(req: NextRequest) {
   try {
     const token = cookies().get("funds-explorer-token")?.value;
-    if (!isValidToken(token)) return NextResponse.json("Invalid token", { status: 401 });
+    const uid = validateUser(token);
+    if (!uid) return NextResponse.json("Invalid token", { status: 401 });
 
     const alias = req.nextUrl.pathname.split("/").pop() ?? "";
 
     const transactionsRef = collection(db, "transactions");
-    const q = query(transactionsRef, where("fund_alias", "==", alias));
+    const q = query(transactionsRef, where("fund_alias", "==", alias), where("user_id", "==", uid));
     const response = await getDocs(q);
 
     const data = response?.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as ITransaction[];

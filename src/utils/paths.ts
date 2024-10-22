@@ -15,7 +15,7 @@ export const API = {
   },
   TRANSACTIONS: {
     GET_TRANSACTIONS: "/api/transactions/get-transactions",
-    GET_TRANSACTION_BY_FUND: "/api/transactions/get-transaction-by-fund/",
+    GET_TRANSACTIONS_BY_FUND: "/api/transactions/get-transactions-by-fund/",
     POST_TRANSACTION: "/api/transactions/post-transaction",
     PATCH_TRANSACTION: "/api/transactions/patch-transaction/",
     DELETE_TRANSACTION: "/api/transactions/delete-transaction/",
