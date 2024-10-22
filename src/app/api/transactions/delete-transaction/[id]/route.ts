@@ -12,8 +12,8 @@ export async function DELETE(req: NextRequest) {
 
     const id = req.nextUrl.pathname.split("/").pop() ?? "";
 
-    const fundRef = doc(db, "transactions", id);
-    await deleteDoc(fundRef);
+    const transactionsRef = doc(db, "transactions", id);
+    await deleteDoc(transactionsRef);
 
     return Response.json("Transaction deleted", { status: 200 });
   } catch (error) {

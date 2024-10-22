@@ -19,4 +19,10 @@ export const API = {
     PATCH_TRANSACTION: "/api/transactions/patch-transaction/",
     DELETE_TRANSACTION: "/api/transactions/delete-transaction/",
   },
+  INCOMES: {
+    GET_INCOMES: "/api/incomes/get-incomes",
+    POST_INCOME: "/api/incomes/post-income",
+    PATCH_INCOME: "/api/incomes/patch-income/",
+    DELETE_INCOME: "/api/incomes/delete-income/",
+  },
 };

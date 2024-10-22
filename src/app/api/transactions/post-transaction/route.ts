@@ -13,8 +13,8 @@ export async function POST(req: NextRequest) {
     const token = cookies().get("funds-explorer-token")?.value;
     if (!isValidToken(token)) return NextResponse.json("Invalid token", { status: 401 });
 
-    const fundsRef = collection(db, "transactions");
-    await addDoc(fundsRef, { ...body });
+    const transactionsRef = collection(db, "transactions");
+    await addDoc(transactionsRef, { ...body });
 
     return NextResponse.json("Transaction created successfully", { status: 200 });
   } catch (error) {

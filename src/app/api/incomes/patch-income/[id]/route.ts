@@ -1,23 +1,24 @@
 import { AxiosError } from "axios";
-import { collection, getDocs } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { cookies } from "next/headers";
-import { NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { db } from "@/services/firebase";
 import { isValidToken } from "@/utils/lib";
-import type { ITransaction } from "./types";
+import type { IPatchFund } from "./types";
 
-export async function GET() {
+export async function PATCH(req: NextRequest) {
+  const body: IPatchFund = await req.json();
+
   try {
     const token = cookies().get("funds-explorer-token")?.value;
     if (!isValidToken(token)) return NextResponse.json("Invalid token", { status: 401 });
 
-    const transactionsRef = collection(db, "transactions");
-    const response = await getDocs(transactionsRef);
+    const alias = req.nextUrl.pathname.split("/").pop() ?? "";
 
-    const data = response?.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as ITransaction[];
-    const count = data?.length;
+    const fundRef = doc(db, "incomes", alias);
+    await updateDoc(fundRef, { ...body });
 
-    return NextResponse.json({ data, count }, { status: 200 });
+    return NextResponse.json("Fund created successfully", { status: 200 });
   } catch (error) {
     if (error instanceof AxiosError) {
       return NextResponse.json(error.response?.data.message, { status: error.response?.status });

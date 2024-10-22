@@ -10,10 +10,10 @@ export async function DELETE(req: NextRequest) {
     const token = cookies().get("funds-explorer-token")?.value;
     if (!isValidToken(token)) return Response.json("Invalid token", { status: 401 });
 
-    const alias = req.nextUrl.pathname.split("/").pop() ?? "";
+    const id = req.nextUrl.pathname.split("/").pop() ?? "";
 
-    const fundsRef = doc(db, "funds", alias);
-    await deleteDoc(fundsRef);
+    const incomesRef = doc(db, "incomes", id);
+    await deleteDoc(incomesRef);
 
     return Response.json("Fund deleted", { status: 200 });
   } catch (error) {

@@ -15,8 +15,8 @@ export async function PATCH(req: NextRequest) {
 
     const alias = req.nextUrl.pathname.split("/").pop() ?? "";
 
-    const fundRef = doc(db, "funds", alias);
-    await updateDoc(fundRef, { ...body });
+    const fundsRef = doc(db, "funds", alias);
+    await updateDoc(fundsRef, { ...body });
 
     return NextResponse.json("Fund created successfully", { status: 200 });
   } catch (error) {

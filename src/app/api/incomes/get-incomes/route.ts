@@ -4,17 +4,17 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { db } from "@/services/firebase";
 import { isValidToken } from "@/utils/lib";
-import type { ITransaction } from "./types";
+import type { IIncome } from "./types";
 
 export async function GET() {
   try {
     const token = cookies().get("funds-explorer-token")?.value;
     if (!isValidToken(token)) return NextResponse.json("Invalid token", { status: 401 });
 
-    const transactionsRef = collection(db, "transactions");
-    const response = await getDocs(transactionsRef);
+    const incomesRef = collection(db, "incomes");
+    const response = await getDocs(incomesRef);
 
-    const data = response?.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as ITransaction[];
+    const data = response?.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as IIncome[];
     const count = data?.length;
 
     return NextResponse.json({ data, count }, { status: 200 });
