@@ -21,6 +21,7 @@ export const API = {
   },
   INCOMES: {
     GET_INCOMES: "/api/incomes/get-incomes",
+    GET_INCOMES_BY_FUND: "/api/incomes/get-incomes-by-fund/",
     POST_INCOME: "/api/incomes/post-income",
     PATCH_INCOME: "/api/incomes/patch-income/",
     DELETE_INCOME: "/api/incomes/delete-income/",
