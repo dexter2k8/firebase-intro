@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { db } from "@/services/firebase";
@@ -13,7 +13,8 @@ export async function GET() {
     if (!uid) return NextResponse.json("Invalid token", { status: 401 });
 
     const transactionsRef = collection(db, "transactions");
-    const q = query(transactionsRef, where("user_id", "==", uid));
+    // * SEE OBSERVATIONS at end of get-incomes file
+    const q = query(transactionsRef, where("user_id", "==", uid), orderBy("bought_at", "desc"));
     const response = await getDocs(q);
 
     const data = response?.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as ITransaction[];

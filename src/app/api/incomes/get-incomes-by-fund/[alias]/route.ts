@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { db } from "@/services/firebase";
@@ -16,7 +16,14 @@ export async function GET(req: NextRequest) {
     const alias = req.nextUrl.pathname.split("/").pop() ?? "";
 
     const incomesRef = collection(db, "incomes");
-    const q = query(incomesRef, where("fund_alias", "==", alias), where("user_id", "==", uid));
+    // * SEE OBSERVATIONS at end of get-incomes file
+    const q = query(
+      incomesRef,
+      where("fund_alias", "==", alias),
+      where("user_id", "==", uid),
+      orderBy("updated_at", "desc")
+    );
+
     const response = await getDocs(q);
 
     const data = response?.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as IIncome[];

@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { db } from "@/services/firebase";
@@ -13,7 +13,8 @@ export async function GET() {
     if (!uid) return NextResponse.json("Invalid token", { status: 401 });
 
     const incomesRef = collection(db, "incomes");
-    const q = query(incomesRef, where("user_id", "==", uid));
+    // * SEE OBSERVATIONS at end of file
+    const q = query(incomesRef, where("user_id", "==", uid), orderBy("updated_at", "desc"));
     const response = await getDocs(q);
 
     const data = response?.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as IIncome[];
@@ -27,3 +28,15 @@ export async function GET() {
     return NextResponse.json("Internal Server Error", { status: 500 });
   }
 }
+
+// Em uma query do firebase, o campo em ORDERBY precisa ser o mesmo de WHERE.
+// Para consultas onde ORDERBY e WHERE são diferentes, é preciso indexar os campos.
+// - Vá ao console do Firebase.
+// - Acesse Firestore Database.
+// - No menu à esquerda, clique em Indexes.
+// - Clique em Create Index.
+// - Preencha os campos:
+//   - Collection: incomesRef (ou o nome da sua coleção).
+//   - Fields:
+//   - user_id como Ascending ou Descending (geralmente Ascending).
+//   - updated_at como Descending (de acordo com sua consulta).
