@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
+// import { collection, doc, writeBatch } from "firebase/firestore";
 import { useSWR } from "@/hook/useSWR";
 import api from "@/services/api";
+// import { db } from "@/services/firebase";
 import { API } from "@/utils/paths";
 import ExcelReader from "../__components__/ExcelReader";
 import type { IIncome } from "@/app/api/incomes/get-incomes/types";
@@ -39,21 +41,38 @@ export default function Dashboard() {
     await api.delete(API.INCOMES.DELETE_INCOME + "HEyNxvlFao1Zv4BPs0Jr");
   };
 
-  const { response: incomesFund } = useSWR(API.INCOMES.GET_INCOMES_BY_FUND + "PETR4");
-  const { response: transactions } = useSWR(API.TRANSACTIONS.GET_TRANSACTIONS);
-  const { response: transactionsFund } = useSWR(
-    API.TRANSACTIONS.GET_TRANSACTIONS_BY_FUND + "PETR4"
-  );
-
-  console.log({ incomesData }, { transactions }, { incomesFund }, { transactionsFund });
+  // const { response: incomesFund } = useSWR(API.INCOMES.GET_INCOMES_BY_FUND + "PETR4");
+  // const { response: transactions } = useSWR(API.TRANSACTIONS.GET_TRANSACTIONS);
+  // const { response: transactionsFund } = useSWR(
+  //   API.TRANSACTIONS.GET_TRANSACTIONS_BY_FUND + "PETR4"
+  // );
 
   return (
     <main>
-      <h1>Dashboard</h1>
-      <button onClick={handleAdd}>POST FUND</button>
-      <button onClick={handleEdit}>PATCH FUND</button>
-      <button onClick={handleDelete}>DELETE FUND</button>
-      <ExcelReader onFile={setIncomes} />
+      <div>
+        <h1>Dashboard</h1>
+        <button onClick={handleAdd}>POST FUND</button>
+        <button onClick={handleEdit}>PATCH FUND</button>
+        <button onClick={handleDelete}>DELETE FUND</button>
+        <ExcelReader onFile={setIncomes} />
+      </div>
+      {/* <div>
+        <button
+          onClick={() => {
+            const batch = writeBatch(db);
+            const ref = collection(db, "transactions");
+
+            transactionsDB.forEach((db) => {
+              const docRef = doc(ref);
+              batch.set(docRef, { ...db });
+            });
+
+            batch.commit();
+          }}
+        >
+          POPULATE DATABASE
+        </button>
+      </div> */}
     </main>
   );
 }

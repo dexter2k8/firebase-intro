@@ -2,28 +2,52 @@
   "extends": ["next/core-web-vitals", "next/typescript"],
   "plugins": ["simple-import-sort", "@typescript-eslint"],
   "rules": {
-    "@typescript-eslint/consistent-type-imports": "error"
+    // INFER "import type" RULE
+    "@typescript-eslint/consistent-type-imports": "error",
+    // CONST DECLARED AND NOT USED RULE
+    // "@typescript-eslint/no-unused-vars": "warn",
+    // INTERFACE AND TYPE PATTERN RULES
+    "@typescript-eslint/naming-convention": [
+      "warn",
+      {
+        "selector": "interface",
+        "format": ["PascalCase"],
+        "custom": {
+          "regex": "^I[A-Z]",
+          "match": true
+        }
+      },
+      {
+        "selector": "typeAlias",
+        "format": ["PascalCase"],
+        "custom": {
+          "regex": "^T[A-Z]",
+          "match": true
+        }
+      }
+    ]
   },
   "overrides": [
     {
       "files": ["**/*.js", "**/*.ts", "**/*.tsx"],
       "rules": {
+        // SORT OF IMPORTS RULE
         "simple-import-sort/imports": [
           "error",
           {
-            "groups": [ 
+            "groups": [
               [
-                "^\\u0000",             // Side effect imports
-                "^node:",               // Node.js builtins
-                "^react$",              // React import
-                "^next$",               // Next.js import
-                "^react-native$",       // React Native import
-                "^@?\\w",               // Packages starting with `@` or plain packages (3rd party)
-                "^@",                   // Scoped packages
-                "^[a-z]",               // Non-scoped packages
-                "^",                    // Absolute imports
-                "^\\.",                 // Relative imports (both starting with `./` and `../`)
-                "^@assets",             // Local packages
+                "^\\u0000", // Side effect imports
+                "^node:", // Node.js builtins
+                "^react$", // React import
+                "^next$", // Next.js import
+                "^react-native$", // React Native import
+                "^@?\\w", // Packages starting with `@` or plain packages (3rd party)
+                "^@", // Scoped packages
+                "^[a-z]", // Non-scoped packages
+                "^", // Absolute imports
+                "^\\.", // Relative imports (both starting with `./` and `../`)
+                "^@assets", // Local packages
                 "^@app",
                 "^@templates",
                 "^@utils",
@@ -33,19 +57,19 @@
                 "^@screens",
                 "^@navigation",
                 "^@styles",
-                "^\\.\\.(?!/?$)",        // Imports starting with `../`
-                "^\\.\\./?$",            // Relative imports starting with `../`
-                "^\\./(?=.*/)(?!/?$)",   // Imports starting with `./` with folders
-                "^\\.(?!/?$)",           // Imports starting with `.`
-                "^\\./?$",               // Imports starting with `./`
-                "^./styles.ts$",         // Styled components imports
-                "^./styles.scss$",       // Style sass imports
-                "^./styles.module.scss$",// Style sass imports
-                "^./styles.css$",       // Style css imports
-                "^./styles.module.css$",// Style css imports
-                "^@?\\w.*\\u0000$",      // Type imports from other contexts
-                "^[^.].*\\u0000$",       // Type imports from actual contexts
-                "^\\..*\\u0000$"         // Type imports from relative paths
+                "^\\.\\.(?!/?$)", // Imports starting with `../`
+                "^\\.\\./?$", // Relative imports starting with `../`
+                "^\\./(?=.*/)(?!/?$)", // Imports starting with `./` with folders
+                "^\\.(?!/?$)", // Imports starting with `.`
+                "^\\./?$", // Imports starting with `./`
+                "^./styles.ts$", // Styled components imports
+                "^./styles.scss$", // Style sass imports
+                "^./styles.module.scss$", // Style sass imports
+                "^./styles.css$", // Style css imports
+                "^./styles.module.css$", // Style css imports
+                "^@?\\w.*\\u0000$", // Type imports from other contexts
+                "^[^.].*\\u0000$", // Type imports from actual contexts
+                "^\\..*\\u0000$" // Type imports from relative paths
               ]
             ]
           }

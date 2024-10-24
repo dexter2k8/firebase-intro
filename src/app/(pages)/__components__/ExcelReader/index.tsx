@@ -16,8 +16,8 @@ export default function ExcelReader({ onFile }: IExcelReaderProps) {
   useEffect(() => {
     if (incomesData) {
       const parsedIncomes = incomesData.map((item: IExcelFileProps) => {
-        const parsedDate = moment(item.Pagamento, "DD/MM/YYYY").format("YYYY-MM-DD");
-        const parsedAlias = item.Produto.split(" ")[0];
+        const parsedDate = moment(item?.Pagamento, "DD/MM/YYYY").format("YYYY-MM-DD");
+        const parsedAlias = item?.Produto?.split(" ")[0];
         return {
           income: item["Valor líquido"],
           updated_at: parsedDate,
@@ -49,7 +49,7 @@ export default function ExcelReader({ onFile }: IExcelReaderProps) {
   return (
     <div className={reader}>
       <small>Get excel incomes</small>
-      <input type="file" accept=".xlsx, .xls" onChange={handleFile} />
+      <input type="file" accept=".xlsx, .xls, .csv" onChange={handleFile} />
     </div>
   );
 }
