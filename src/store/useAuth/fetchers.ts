@@ -5,7 +5,14 @@ import type { ISignInProps, ISignUpProps } from "./types";
 
 async function SignIn({ email, password, name, avatar }: ISignInProps) {
   try {
-    await api.post(API.AUTH.SIGN_IN, { email, password, name, avatar });
+    // await api.post(API.AUTH.SIGN_IN, { email, password, name, avatar });
+    fetch(API.AUTH.SIGN_IN, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password, name, avatar }),
+    });
     return true;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
@@ -17,6 +24,7 @@ async function SignIn({ email, password, name, avatar }: ISignInProps) {
 async function SignUp({ email, password, name, avatar }: ISignUpProps) {
   try {
     await api.post(API.AUTH.SIGN_UP, { email, password, name, avatar });
+
     toast.success("Sign up successfully");
     return true;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
