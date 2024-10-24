@@ -5,14 +5,8 @@ import type { ISignInProps, ISignUpProps } from "./types";
 
 async function SignIn({ email, password, name, avatar }: ISignInProps) {
   try {
-    // await api.post(API.AUTH.SIGN_IN, { email, password, name, avatar });
-    fetch(API.AUTH.SIGN_IN, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password, name, avatar }),
-    });
+    await api.post(API.AUTH.SIGN_IN, { email, password, name, avatar });
+
     return true;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
