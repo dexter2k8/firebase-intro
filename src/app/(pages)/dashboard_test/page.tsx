@@ -9,10 +9,22 @@ import type { IIncome } from "@/app/api/incomes/get-incomes/types";
 export default function Dashboard() {
   const [incomes, setIncomes] = useState<Partial<IIncome>[]>();
   // const uid = "xP5DC40Am1fjrM5GsvEzPEhCURG3";
+
+  const { response: incomesData } = useSWR<{ data: IIncome[] }>(API.INCOMES.GET_INCOMES);
+  // Função auxiliar para verificar se o income já existe na base de dados
+  const incomeFound = (incomeExcel: Partial<IIncome>, incomesBase: IIncome[]) =>
+    incomesBase?.some(
+      (incomeBase) =>
+        incomeBase.updated_at === incomeExcel.updated_at && incomeBase.income === incomeExcel.income
+    );
+
   const handleAdd = async () => {
     if (!incomes) return;
 
-    await api.post(API.INCOMES.POST_MULTIPLE_INCOMES, incomes);
+    // Filtra os incomes do excel que já existem na base de dados
+    const filteredIncomes = incomes.filter((income) => !incomeFound(income, incomesData.data));
+
+    await api.post(API.INCOMES.POST_MULTIPLE_INCOMES, filteredIncomes);
   };
 
   const handleEdit = async () => {
@@ -27,7 +39,6 @@ export default function Dashboard() {
     await api.delete(API.INCOMES.DELETE_INCOME + "HEyNxvlFao1Zv4BPs0Jr");
   };
 
-  const { response: incomesData } = useSWR(API.INCOMES.GET_INCOMES);
   const { response: incomesFund } = useSWR(API.INCOMES.GET_INCOMES_BY_FUND + "PETR4");
   const { response: transactions } = useSWR(API.TRANSACTIONS.GET_TRANSACTIONS);
   const { response: transactionsFund } = useSWR(

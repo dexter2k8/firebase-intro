@@ -19,7 +19,6 @@ export default function ExcelReader({ onFile }: IExcelReaderProps) {
         const parsedDate = moment(item.Pagamento, "DD/MM/YYYY").format("YYYY-MM-DD");
         const parsedAlias = item.Produto.split(" ")[0];
         return {
-          price: item["Preço unitário"],
           income: item["Valor líquido"],
           updated_at: parsedDate,
           fund_alias: parsedAlias,
