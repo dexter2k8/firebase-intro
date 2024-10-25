@@ -21,6 +21,7 @@ export const API = {
     DELETE_TRANSACTION: "/api/transactions/delete-transaction/",
   },
   INCOMES: {
+    GET_PORTFOLIO: "/api/incomes/get-portfolio",
     GET_INCOMES: "/api/incomes/get-incomes",
     GET_INCOMES_BY_FUND: "/api/incomes/get-incomes-by-fund/",
     POST_MULTIPLE_INCOMES: "/api/incomes/post-multiple-incomes",
