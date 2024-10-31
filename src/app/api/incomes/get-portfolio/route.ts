@@ -23,7 +23,7 @@ export async function GET(req: NextRequest) {
     const parsedEndDate = Timestamp.fromDate(new Date(endDate ?? ""));
 
     const token = cookies().get("funds-explorer-token")?.value;
-    const uid = validateUser(token);
+    const uid = await validateUser(token);
     if (!uid) return NextResponse.json("Invalid token", { status: 401 });
 
     const incomesRef = collection(db, "incomes");

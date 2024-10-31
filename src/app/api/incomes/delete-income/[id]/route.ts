@@ -8,7 +8,8 @@ import type { NextRequest } from "next/server";
 export async function DELETE(req: NextRequest) {
   try {
     const token = cookies().get("funds-explorer-token")?.value;
-    if (!validateUser(token)) return Response.json("Invalid token", { status: 401 });
+    const uid = await validateUser(token);
+    if (!uid) return Response.json("Invalid token", { status: 401 });
 
     const id = req.nextUrl.pathname.split("/").pop() ?? "";
 

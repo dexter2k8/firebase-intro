@@ -62,6 +62,7 @@ export default function Dashboard() {
   // const { response: transactionsFund } = useSWR(
   //   API.TRANSACTIONS.GET_TRANSACTIONS_BY_FUND + "PETR4"
   // );
+  // console.log(transactions);
 
   console.log(portfolio);
 

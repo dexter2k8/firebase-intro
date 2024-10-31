@@ -9,7 +9,8 @@ import type { IFunds } from "./types";
 export async function GET() {
   try {
     const token = cookies().get("funds-explorer-token")?.value;
-    if (!validateUser(token)) return NextResponse.json("Invalid token", { status: 401 });
+    const uid = await validateUser(token);
+    if (!uid) return NextResponse.json("Invalid token", { status: 401 });
 
     const fundsRef = collection(db, "funds");
     const response = await getDocs(fundsRef);

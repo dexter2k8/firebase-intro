@@ -71,11 +71,11 @@ export function formatBRL(value: string) {
   };
 }
 
-const validKids = [
-  "718f4df92ad175f6a0307ab65d8f67f054fa1e5f",
-  "8d9befd3effcbbc82c83ad0c972c8ea978f6f137",
-];
-export function validateUser(token?: string): string | undefined {
+const secureURL = process.env.NEXT_PUBLIC_SECURE_TOKEN_URL || "";
+export async function validateUser(token?: string): Promise<string | undefined> {
+  const fetchKids = await fetch(secureURL).then((res) => res.json());
+  const validKids = Object.keys(fetchKids);
+
   if (!token) return undefined;
 
   const decoded = jwt.decode(token, { complete: true }) as JwtPayload;
