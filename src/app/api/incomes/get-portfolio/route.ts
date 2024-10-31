@@ -5,11 +5,12 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { db } from "@/services/firebase";
 import { validateUser } from "@/utils/lib";
-import { calculateMonthlySums } from "./utils";
+import { calculateMonthlySums, getGain } from "./utils";
 import type { NextRequest } from "next/server";
 import type { IFunds } from "../../funds/get-funds/types";
 import type { ITransaction } from "../../transactions/get-transactions/types";
-import type { IIncome } from "./types";
+import type { IIncome } from "../get-incomes/types";
+import type { IGetSelfProfitsResponse } from "./types";
 
 export async function GET(req: NextRequest) {
   const searchParams = new URL(req.url);
@@ -69,12 +70,28 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const data = calculateMonthlySums(incomes, transactions, initDate, endDate);
+    const profits = calculateMonthlySums(incomes, transactions);
+    const lastPatrimony = profits[profits.length - 1].total_patrimony;
+    const previousPatrimony = profits[profits.length - 2].total_patrimony;
+    const lastProfit = profits[profits.length - 1].total_income;
+    const previousProfit = profits[profits.length - 2].total_income;
 
-    // const count = data?.length;
+    const percentPatrimony = getGain(lastPatrimony, previousPatrimony);
+    const percentProfit = getGain(lastProfit, previousProfit);
 
-    return NextResponse.json({ data, incomes, transactions }, { status: 200 });
-    // return NextResponse.json({ data, count }, { status: 200 });
+    const data: IGetSelfProfitsResponse = {
+      data: profits,
+      patrimony: {
+        value: lastPatrimony,
+        difference: percentPatrimony,
+      },
+      profit: {
+        value: lastProfit,
+        difference: percentProfit,
+      },
+    };
+
+    return Response.json(data, { status: 200 });
   } catch (error) {
     if (error instanceof AxiosError) {
       return NextResponse.json(error.response?.data.message, { status: error.response?.status });

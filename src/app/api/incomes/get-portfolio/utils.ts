@@ -1,33 +1,22 @@
 import moment from "moment";
 import type { ITransaction } from "../../transactions/get-transactions/types";
-import type { IIncome } from "./types";
+import type { IIncome } from "../get-incomes/types";
 
 interface IIncomeMonthlySums extends IIncome {
   month_end?: string;
 }
 
-export function calculateMonthlySums(
-  incomes: IIncome[],
-  transactions: ITransaction[],
-  initDate: string,
-  endDate: string
-) {
-  // Helper para gerar o range de datas mensais entre initDate e endDate
-  function generateDateRange(initDate: string, endDate: string) {
-    console.log(incomes?.[0].updated_at, incomes?.[incomes?.length - 1].updated_at);
+export function calculateMonthlySums(incomes: IIncome[], transactions: ITransaction[]) {
+  //gera o range de datas mensais entre initDate e endDate
+  const initDate = moment(incomes[incomes.length - 1].updated_at);
+  const endDate = moment(incomes[0].updated_at);
 
-    const dateRange = [];
-    const currentDate = moment(initDate);
+  const dateRange = [];
 
-    while (currentDate.isSameOrBefore(endDate, "month")) {
-      dateRange.push(currentDate.format("YYYY-MM-DD"));
-      currentDate.add(1, "month");
-    }
-
-    return dateRange;
+  while (initDate.isSameOrBefore(endDate, "month")) {
+    dateRange.push(initDate.format("YYYY-MM-DD"));
+    initDate.add(1, "month");
   }
-
-  const dateRange = generateDateRange(initDate, endDate);
 
   // Etapa 1: LatestIncomesPerMonth - Seleciona a última data de atualização para cada fundo e mês
   const latestIncomesPerMonth = dateRange.flatMap((monthStart) => {
@@ -82,4 +71,9 @@ export function calculateMonthlySums(
   });
 
   return monthlySums.filter((monthly) => monthly.total_patrimony > 0 || monthly.total_income > 0);
+}
+
+export function getGain(final: number, initial: number) {
+  if (!initial || !final) return 0;
+  return Number((((final - initial) / initial) * 100).toFixed(1));
 }
