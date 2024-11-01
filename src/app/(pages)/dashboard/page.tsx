@@ -3,15 +3,19 @@ import { useState } from "react";
 import { AiFillDollarCircle } from "react-icons/ai";
 import { FaHandHoldingDollar } from "react-icons/fa6";
 import SegmentedControl from "@/components/SegmentedControl";
+import Skeleton from "@/components/Skeleton";
 import { useSWR } from "@/hook/useSWR";
 import { API } from "@/utils/paths";
 import { endDate, getDate, patrimonyColors, profitColors, segmentedTypes } from "./types";
 import Card from "./__components__/Card";
 import Donut from "./__components__/Charts/Donut";
 import VerticalBars from "./__components__/Charts/VerticalBars";
+import Transaction from "./__components__/Transaction";
 import styles from "./styles.module.scss";
 import type { IGetSelfProfitsResponse } from "@/app/api/incomes/get-portfolio/types";
 import type { IGetIncomesResponse } from "@/app/api/incomes/get-portfolio-by-type/types";
+import type { ITransaction } from "@/app/api/transactions/get-transactions/types";
+import type { IResponse } from "@/app/api/types";
 
 export default function Dashboard() {
   const { dashboard, cards, segmented } = styles;
@@ -29,6 +33,14 @@ export default function Dashboard() {
 
   const { response: portfolioByType, isLoading: isLoadingPortfolioByType } =
     useSWR<IGetIncomesResponse>(API.INCOMES.GET_PORTFOLIO_BY_TYPE);
+
+  const { response: transactions, isLoading: isLoadingTransactions } = useSWR<
+    IResponse<ITransaction>
+  >(API.TRANSACTIONS.GET_TRANSACTIONS);
+
+  const transactionsFiltered = transactions?.data.slice(0, 5);
+
+  const skeletons = Array.from({ length: 5 }, (_, index) => <Skeleton key={index} height={90} />);
 
   return (
     <div className={dashboard}>
@@ -87,6 +99,18 @@ export default function Dashboard() {
           />
         </section>
       </main>
+
+      <aside>
+        <div>
+          <h3>Last transactions</h3>
+          <p>List of the latest 5 company shares traded.</p>
+        </div>
+        {isLoadingTransactions
+          ? skeletons
+          : transactionsFiltered?.map((transaction) => (
+              <Transaction key={transaction.id} {...transaction} />
+            ))}
+      </aside>
     </div>
   );
 }

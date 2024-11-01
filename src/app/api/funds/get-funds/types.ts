@@ -1,4 +1,4 @@
-export type TFundType = "Ação" | "FII" | "BDR";
+import type { TFundType } from "../../types";
 
 export interface IFund {
   alias: string;
