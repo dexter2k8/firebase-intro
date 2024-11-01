@@ -1,5 +1,5 @@
 import { formatCurrency } from "@/utils/lib";
-import type { IGetSelfProfits } from "@/app/api/get_self_profits/types";
+import type { IGetSelfProfits } from "@/app/api/incomes/get-portfolio/types";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const formatParams = (params: any) => {

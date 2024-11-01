@@ -1,4 +1,4 @@
-import type { IGetSelfProfits } from "@/app/api/get_self_profits/types";
+import type { IGetSelfProfits } from "@/app/api/incomes/get-portfolio/types";
 
 export interface IVerticalBarsProps {
   data: IGetSelfProfits[];
