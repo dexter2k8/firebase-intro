@@ -1,0 +1,16 @@
+.container {
+  .content {
+    height: 18rem;
+  }
+}
+
+@media (max-width: 630px) {
+  .container {
+    max-width: 25rem;
+    overflow-x: auto;
+    .content {
+      height: 15rem;
+      min-width: var(--min-width);
+    }
+  }
+}

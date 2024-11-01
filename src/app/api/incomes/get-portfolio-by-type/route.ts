@@ -6,9 +6,11 @@ import { NextResponse } from "next/server";
 import { db } from "@/services/firebase";
 import { validateUser } from "@/utils/lib";
 import { calculatePatrimonyAndIncome } from "./utils";
+import type { IDonutData } from "@/app/(pages)/dashboard/__components__/Charts/Donut/types";
 import type { IFund } from "../../funds/get-funds/types";
 import type { ITransaction } from "../../transactions/get-transactions/types";
 import type { IIncome } from "../get-incomes/types";
+import type { IGetIncomesPatrimony } from "./types";
 
 export async function GET() {
   try {
@@ -52,9 +54,23 @@ export async function GET() {
       funds.some((fund) => fund.alias === transaction.fund_alias)
     );
 
-    const data = calculatePatrimonyAndIncome(incomes, transactions, funds);
+    const data: IGetIncomesPatrimony[] = calculatePatrimonyAndIncome(incomes, transactions, funds);
 
-    return Response.json(data, { status: 200 });
+    const patrimony: IDonutData[] = data.map((income) => {
+      return {
+        name: income.type,
+        value: income.total_patrimony,
+      };
+    });
+
+    const profit: IDonutData[] = data.map((income) => {
+      return {
+        name: income.type,
+        value: income.total_income,
+      };
+    });
+
+    return Response.json({ patrimony, profit }, { status: 200 });
   } catch (error) {
     if (error instanceof AxiosError) {
       return NextResponse.json(error.response?.data.message, { status: error.response?.status });
