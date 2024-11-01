@@ -58,14 +58,14 @@ export default function Dashboard() {
     // type: "FII",
   });
   // const { response: incomesFund } = useSWR(API.INCOMES.GET_INCOMES_BY_FUND + "PETR4");
-  // const { response: transactions } = useSWR(API.TRANSACTIONS.GET_TRANSACTIONS);
-  const { response: portfolioByType } = useSWR(API.INCOMES.GET_PORTFOLIO_BY_TYPE);
+  const { response: transactions } = useSWR(API.TRANSACTIONS.GET_TRANSACTIONS);
+  // const { response: portfolioByType } = useSWR(API.INCOMES.GET_PORTFOLIO_BY_TYPE);
   // const { response: transactionsFund } = useSWR(
   //   API.TRANSACTIONS.GET_TRANSACTIONS_BY_FUND + "PETR4"
   // );
   console.log(portfolio);
 
-  console.log(portfolioByType);
+  console.log(transactions);
 
   return (
     <main>
