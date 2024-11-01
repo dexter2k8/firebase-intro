@@ -19,10 +19,10 @@ export interface IGridBaseColDef<T extends TRowModel = TRowModel> {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type GridColDef<R extends TRowModel = any> = IGridBaseColDef<R>;
+export type TGridColDef<R extends TRowModel = any> = IGridBaseColDef<R>;
 
 export interface ITable {
-  columns: GridColDef[];
+  columns: TGridColDef[];
   rows: TRowModel[];
   isLoading?: boolean;
   onRowClick?: (row: TRowModel) => void;

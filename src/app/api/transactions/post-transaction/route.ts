@@ -4,10 +4,10 @@ import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 import { db } from "@/services/firebase";
 import { validateUser } from "@/utils/lib";
-import type { IPostTransaction } from "./types";
+import type { TPostTransaction } from "./types";
 
 export async function POST(req: NextRequest) {
-  const body: IPostTransaction = await req.json();
+  const body: TPostTransaction = await req.json();
 
   try {
     const token = cookies().get("funds-explorer-token")?.value;

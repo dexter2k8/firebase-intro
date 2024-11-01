@@ -4,10 +4,10 @@ import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 import { db } from "@/services/firebase";
 import { validateUser } from "@/utils/lib";
-import type { IPatchTransaction } from "./types";
+import type { TPatchTransaction } from "./types";
 
 export async function PATCH(req: NextRequest) {
-  const body: IPatchTransaction = await req.json();
+  const body: TPatchTransaction = await req.json();
 
   try {
     const token = cookies().get("funds-explorer-token")?.value;

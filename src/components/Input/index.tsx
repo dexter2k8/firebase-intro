@@ -11,13 +11,13 @@ import InfoCircle from "./Icons/info-circle";
 import type { FC, InputHTMLAttributes } from "react";
 
 type TStatus = "info" | "success" | "error";
-type size = "small" | "default" | "large";
+type TSize = "small" | "default" | "large";
 
 export interface IInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
   label?: string;
   status?: TStatus;
   message?: string;
-  size?: size;
+  size?: TSize;
 }
 
 const messageIcon = (status: TStatus) => {
@@ -81,8 +81,8 @@ const InputBasic: FC<IInputProps> = forwardRef<HTMLInputElement, IInputProps>(
               status === "info"
                 ? "dx-input-infoMessage"
                 : status === "success"
-                  ? "dx-input-successMessage"
-                  : "dx-input-errorMessage"
+                ? "dx-input-successMessage"
+                : "dx-input-errorMessage"
             }
           >
             {messageIcon(status)} {message}

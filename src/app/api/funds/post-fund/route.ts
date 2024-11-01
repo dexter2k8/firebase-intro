@@ -4,10 +4,10 @@ import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 import { db } from "@/services/firebase";
 import { validateUser } from "@/utils/lib";
-import type { IPostFund } from "./types";
+import type { TPostFund } from "./types";
 
 export async function POST(req: NextRequest) {
-  const body: IPostFund = await req.json();
+  const body: TPostFund = await req.json();
   const { alias, ...rest } = body;
 
   try {

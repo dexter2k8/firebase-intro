@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import moment from "moment";
 import * as XLSX from "xlsx";
 import styles from "./styles.module.scss";
-import type { IPostIncome } from "@/app/api/incomes/post-multiple-incomes/types";
+import type { TPostIncome } from "@/app/api/incomes/post-multiple-incomes/types";
 import type { IExcelFileProps } from "./types";
 
 interface IExcelReaderProps {
-  onFile: (data: Partial<IPostIncome>[]) => void;
+  onFile: (data: Partial<TPostIncome>[]) => void;
 }
 
 export default function ExcelReader({ onFile }: IExcelReaderProps) {

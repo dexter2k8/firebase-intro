@@ -1,7 +1,7 @@
-import type { GridColDef, TRowModel } from "../../types";
+import type { TGridColDef, TRowModel } from "../../types";
 
 export interface IRow {
-  columns: GridColDef[];
+  columns: TGridColDef[];
   colWidths: number[];
   row: TRowModel;
   rowIndex: number;

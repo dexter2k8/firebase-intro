@@ -1,3 +1,3 @@
 import type { ITransaction } from "../../get-transactions/types";
 
-export type IPatchTransaction = ITransaction;
+export type TPatchTransaction = ITransaction;

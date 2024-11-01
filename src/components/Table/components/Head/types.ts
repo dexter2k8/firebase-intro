@@ -1,4 +1,4 @@
-import type { GridColDef } from "../../types";
+import type { TGridColDef } from "../../types";
 
 export type TSort = "asc" | "desc";
 
@@ -13,7 +13,7 @@ export interface IFilterProps {
 }
 
 export interface IHead {
-  columns: GridColDef[];
+  columns: TGridColDef[];
   colWidths: number[];
   onSort: ({ field, sort }: ISortProps) => void;
   onFilter: ({ field, text }: IFilterProps) => void;
