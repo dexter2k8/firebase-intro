@@ -48,11 +48,9 @@ export function calculateMonthlySums(incomes: IIncome[], transactions: ITransact
 
     latestIncomesPerMonth.forEach((income) => {
       if (income.month_end === monthEnd) {
-        const fundAlias = income.fund_alias;
-
         // Filtra transactions até o fim do mês para obter a quantidade total
         const quantity = transactions
-          .filter((trans) => trans.fund_alias === fundAlias && trans.bought_at <= monthEnd)
+          .filter((trans) => trans.fund_alias === income.fund_alias)
           .reduce((sum, trans) => sum + (trans.quantity || 0), 0);
 
         // Adiciona ao total_patrimony

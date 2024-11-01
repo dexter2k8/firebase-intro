@@ -24,17 +24,11 @@ export function calculatePatrimonyAndIncome(
     return acc;
   }, {});
 
-  console.log(latestIncomes);
-
   // Transformar latestIncomes em um array e adicionar quantidade e monthly_income
   const latestIncomesWithDetails = Object.values(latestIncomes).map((income) => {
     // Calcular a quantidade total de transações até a data `updated_at` de income
     const quantity = transactions
-      .filter(
-        (trans) =>
-          trans.fund_alias === income.fund_alias &&
-          moment(trans.bought_at).isSameOrBefore(income.updated_at)
-      )
+      .filter((trans) => trans.fund_alias === income.fund_alias)
       .reduce((sum, trans) => sum + (trans.quantity || 0), 0);
 
     // Calcular monthly_income do último mês
@@ -53,8 +47,6 @@ export function calculatePatrimonyAndIncome(
       monthly_income: monthlyIncome,
     };
   });
-
-  console.log(latestIncomesWithDetails);
 
   // Etapa 2: Agrupar por tipo de fundo e calcular total_patrimony e total_income
   const result = latestIncomesWithDetails.reduce(

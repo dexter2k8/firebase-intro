@@ -10,7 +10,7 @@ import { useState } from "react";
 // where,
 // writeBatch,
 // } from "firebase/firestore";
-// import moment from "moment";
+import moment from "moment";
 import { useSWR } from "@/hook/useSWR";
 import api from "@/services/api";
 // import { db } from "@/services/firebase";
@@ -50,20 +50,20 @@ export default function Dashboard() {
     await api.delete(API.INCOMES.DELETE_INCOME + "HEyNxvlFao1Zv4BPs0Jr");
   };
 
-  // const initDate = moment().startOf("year").format("YYYY-MM-DD");
-  // const endDate = moment().startOf("day").format("YYYY-MM-DD");
-  // const { response: portfolio } = useSWR(API.INCOMES.GET_PORTFOLIO, {
-  //   initDate,
-  //   endDate,
-  //   type: "BDR",
-  // });
+  const initDate = moment().startOf("year").format("YYYY-MM-DD");
+  const endDate = moment().startOf("day").format("YYYY-MM-DD");
+  const { response: portfolio } = useSWR(API.INCOMES.GET_PORTFOLIO, {
+    initDate,
+    endDate,
+    // type: "FII",
+  });
   // const { response: incomesFund } = useSWR(API.INCOMES.GET_INCOMES_BY_FUND + "PETR4");
   // const { response: transactions } = useSWR(API.TRANSACTIONS.GET_TRANSACTIONS);
   const { response: portfolioByType } = useSWR(API.INCOMES.GET_PORTFOLIO_BY_TYPE);
   // const { response: transactionsFund } = useSWR(
   //   API.TRANSACTIONS.GET_TRANSACTIONS_BY_FUND + "PETR4"
   // );
-  // console.log(transactions);
+  console.log(portfolio);
 
   console.log(portfolioByType);
 
