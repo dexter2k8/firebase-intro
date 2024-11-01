@@ -7,7 +7,7 @@ import { db } from "@/services/firebase";
 import { validateUser } from "@/utils/lib";
 import { calculateMonthlySums, getGain } from "./utils";
 import type { NextRequest } from "next/server";
-import type { IFunds } from "../../funds/get-funds/types";
+import type { IFund } from "../../funds/get-funds/types";
 import type { ITransaction } from "../../transactions/get-transactions/types";
 import type { IIncome } from "../get-incomes/types";
 import type { IGetSelfProfitsResponse } from "./types";
@@ -63,7 +63,7 @@ export async function GET(req: NextRequest) {
 
     if (type) {
       const fundsDoc = await getDocs(qFunds);
-      const funds = fundsDoc?.docs.map((doc) => ({ alias: doc.id })) as IFunds[];
+      const funds = fundsDoc?.docs.map((doc) => ({ alias: doc.id })) as IFund[];
       incomes = incomes.filter((income) => funds.some((fund) => fund.alias === income.fund_alias));
       transactions = transactions.filter((transaction) =>
         funds.some((fund) => fund.alias === transaction.fund_alias)

@@ -22,6 +22,7 @@ export const API = {
   },
   INCOMES: {
     GET_PORTFOLIO: "/api/incomes/get-portfolio",
+    GET_PORTFOLIO_BY_TYPE: "/api/incomes/get-portfolio-by-type",
     GET_INCOMES: "/api/incomes/get-incomes",
     GET_INCOMES_BY_FUND: "/api/incomes/get-incomes-by-fund/",
     POST_MULTIPLE_INCOMES: "/api/incomes/post-multiple-incomes",

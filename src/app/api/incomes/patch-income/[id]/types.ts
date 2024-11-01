@@ -1,3 +1,3 @@
-import type { IFunds } from "@/app/api/funds/get-funds/types";
+import type { IFund } from "@/app/api/funds/get-funds/types";
 
-export type IPatchFund = IFunds;
+export type IPatchFund = IFund;

@@ -1,3 +1,3 @@
-import type { IFunds } from "../../get-funds/types";
+import type { IFund } from "../../get-funds/types";
 
-export type IPatchFund = IFunds;
+export type IPatchFund = IFund;

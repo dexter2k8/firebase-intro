@@ -1,6 +1,6 @@
 export type TFundType = "Ação" | "FII" | "BDR";
 
-export interface IFunds {
+export interface IFund {
   alias: string;
   name: string;
   type: TFundType;

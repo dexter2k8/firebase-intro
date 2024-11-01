@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { db } from "@/services/firebase";
 import { validateUser } from "@/utils/lib";
-import type { IFunds } from "./types";
+import type { IFund } from "./types";
 
 export async function GET() {
   try {
@@ -15,7 +15,7 @@ export async function GET() {
     const fundsRef = collection(db, "funds");
     const response = await getDocs(fundsRef);
 
-    const data = response?.docs.map((doc) => ({ ...doc.data(), alias: doc.id })) as IFunds[];
+    const data = response?.docs.map((doc) => ({ ...doc.data(), alias: doc.id })) as IFund[];
     const count = data?.length;
 
     return NextResponse.json({ data, count }, { status: 200 });
