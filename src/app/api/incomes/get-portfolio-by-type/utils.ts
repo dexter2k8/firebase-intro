@@ -24,6 +24,14 @@ export function calculatePatrimonyAndIncome(
     return acc;
   }, {});
 
+  // Encontrar o mês mais recente
+  const mostRecentIncome = Object.values(latestIncomes).reduce((max, current) => {
+    const currentDate = moment(current.updated_at);
+    if (currentDate.isAfter(max)) return currentDate;
+
+    return max;
+  }, moment("1970-01-01")); // inicializar com uma data antiga
+
   // Transformar latestIncomes em um array e adicionar quantidade e monthly_income
   const latestIncomesWithDetails = Object.values(latestIncomes).map((income) => {
     // Calcular a quantidade total de transações até a data `updated_at` de income
@@ -31,13 +39,13 @@ export function calculatePatrimonyAndIncome(
       .filter((trans) => trans.fund_alias === income.fund_alias)
       .reduce((sum, trans) => sum + (trans.quantity || 0), 0);
 
-    // Calcular monthly_income do último mês
-    const lastMonth = moment().subtract(1, "month").format("YYYY-MM");
+    // Calcular monthly_income do mês mais recente
+    const mostRecentMonth = mostRecentIncome.format("YYYY-MM");
     const monthlyIncome = incomes
       .filter(
         (i2) =>
           i2.fund_alias === income.fund_alias &&
-          moment(i2.updated_at).format("YYYY-MM") === lastMonth
+          moment(i2.updated_at).format("YYYY-MM") === mostRecentMonth
       )
       .reduce((sum, i2) => sum + (i2.income || 0), 0);
 
