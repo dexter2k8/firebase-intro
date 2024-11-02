@@ -2,10 +2,15 @@
   border: 0.0625rem solid var(--grey);
   border-radius: 0.375rem;
   .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     border-bottom: 0.0625rem solid var(--grey);
     padding-inline: 1rem;
     padding-block: 0.25rem;
-    cursor: help;
+    p {
+      cursor: help;
+    }
   }
   .content {
     display: flex;
