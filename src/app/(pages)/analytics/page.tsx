@@ -1,6 +1,9 @@
+"use client";
 import { AiFillDollarCircle } from "react-icons/ai";
 import { FaArrowTrendUp, FaArrowUpRightDots } from "react-icons/fa6";
 import { RiExchangeFundsFill } from "react-icons/ri";
+import { useSWR } from "@/hook/useSWR";
+import { API } from "@/utils/paths";
 import Card from "../dashboard/__components__/Card";
 import styles from "./styles.module.scss";
 
@@ -11,6 +14,10 @@ export default function Analytics() {
     // table,
     cards,
   } = styles;
+
+  const { response: selfFunds } = useSWR(API.FUNDS.GET_SELF_FUNDS);
+
+  console.log(selfFunds);
 
   return (
     <div className={analytics}>
