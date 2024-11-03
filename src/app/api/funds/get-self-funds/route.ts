@@ -24,10 +24,9 @@ export async function GET() {
     );
 
     const transactionsDoc = await getDocs(qTransactions);
+    const transactions = transactionsDoc?.docs.map((doc) => doc.data());
     const fundsDoc = await getDocs(qFunds);
     const funds = fundsDoc?.docs.map((doc) => ({ ...doc.data(), alias: doc.id })) as IFund[];
-
-    const transactions = transactionsDoc?.docs.map((doc) => doc.data());
 
     // Agrupa as transações por fundo
     const transactionsFund = transactions.reduce((acc, curr) => {
@@ -42,7 +41,7 @@ export async function GET() {
     // Filtra os fundos que possuem quantidade
     const selfFunds = Object.values(transactionsFund).filter((transaction) => transaction.qtd > 0);
 
-    // Retorna os fundos do usuário, retornando uma lista de fundos
+    // Filtra os fundos do usuário, retornando uma lista de fundos
     const data = selfFunds.map((transaction) => {
       const fund = funds.find((fund) => fund.alias === transaction.fund_alias);
       return { ...fund };
