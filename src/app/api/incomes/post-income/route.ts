@@ -1,13 +1,13 @@
 import { AxiosError } from "axios";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, Timestamp } from "firebase/firestore";
 import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 import { db } from "@/services/firebase";
 import { validateUser } from "@/utils/lib";
-import type { TPostIncome } from "./types";
+import type { IPostIncome } from "./types";
 
 export async function POST(req: NextRequest) {
-  const body: TPostIncome = await req.json();
+  const body: IPostIncome = await req.json();
 
   try {
     const token = cookies().get("funds-explorer-token")?.value;
@@ -15,7 +15,10 @@ export async function POST(req: NextRequest) {
     if (!uid) return NextResponse.json("Invalid token", { status: 401 });
 
     const incomesRef = collection(db, "incomes");
-    await addDoc(incomesRef, { ...body, user_id: uid });
+    const { updated_at, ...rest } = body;
+    const updatedAtDate = new Date(updated_at);
+    const date = Timestamp.fromDate(updatedAtDate);
+    await addDoc(incomesRef, { ...rest, updated_at: date, user_id: uid });
 
     return NextResponse.json("Income created successfully", { status: 200 });
   } catch (error) {

@@ -1,6 +1,6 @@
-import type { IGetIncomesFundResponse } from "@/app/api/get_incomes_fund/[fund]/types";
+import type { IGetIncomeByFund } from "@/app/api/incomes/get-incomes-by-fund/[alias]/types";
 
-export default function chartOptions(profits: IGetIncomesFundResponse[]) {
+export default function chartOptions(profits: IGetIncomeByFund[]) {
   const options: echarts.EChartsOption = {
     tooltip: {
       trigger: "axis",

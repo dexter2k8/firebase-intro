@@ -1,3 +1,6 @@
-import type { IIncome } from "../get-incomes/types";
-
-export type TPostIncome = IIncome;
+export interface IPostIncome {
+  updated_at: string;
+  price: string;
+  income: string;
+  fund_alias: string;
+}

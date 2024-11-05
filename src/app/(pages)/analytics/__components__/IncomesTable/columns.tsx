@@ -1,12 +1,12 @@
 import { MdOutlineArrowDropDown, MdOutlineArrowDropUp } from "react-icons/md";
 import TableActions from "@/components/TableActions";
 import { formatCurrency, formatDate } from "@/utils/lib";
-import type { IGetIncomesFundResponse } from "@/app/api/get_incomes_fund/[fund]/types";
-import type { GridColDef } from "@/components/Table/types";
+import type { IGetIncomeByFund } from "@/app/api/incomes/get-incomes-by-fund/[alias]/types";
+import type { TGridColDef } from "@/components/Table/types";
 import type { IActions } from "@/components/TableActions/types";
 
 export function getColumns({ onAction }: IActions) {
-  const columns: GridColDef<IGetIncomesFundResponse>[] = [
+  const columns: TGridColDef<IGetIncomeByFund>[] = [
     {
       field: "updated_at",
       label: "DATE",
@@ -46,10 +46,10 @@ export function getColumns({ onAction }: IActions) {
       render: (value) => <p>{Number(value).toFixed(2)}%</p>,
     },
     {
-      field: "actions" as keyof IGetIncomesFundResponse,
+      field: "actions" as keyof IGetIncomeByFund,
       label: "ACTIONS",
       valueGetter: (row) => row.id,
-      render: (value) => <TableActions id={value} onAction={onAction} />,
+      render: (value) => <TableActions id={value || ""} onAction={onAction} />,
     },
   ];
 

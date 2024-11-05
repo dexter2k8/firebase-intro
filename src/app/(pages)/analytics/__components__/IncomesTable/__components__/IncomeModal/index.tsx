@@ -13,8 +13,8 @@ import api from "@/services/api";
 import { currencyToNumber, formatBRL, parseDate } from "@/utils/lib";
 import styles from "./styles.module.scss";
 import type { SubmitHandler } from "react-hook-form";
-import type { IGetIncomesFundResponse } from "@/app/api/get_incomes_fund/[fund]/types";
-import type { IPostIncome } from "@/app/api/post_income/types";
+import type { IGetIncomeByFund } from "@/app/api/incomes/get-incomes-by-fund/[alias]/types";
+import type { IPostIncome } from "@/app/api/incomes/post-income/types";
 import type { IModalDefaultProps } from "@/components/Modal/types";
 import type { ISelectOptions } from "@/components/Select/types";
 import type { TAction } from "@/components/TableActions/types";
@@ -22,7 +22,7 @@ import type { TAction } from "@/components/TableActions/types";
 interface IIncomeModalProps extends IModalDefaultProps {
   fundList: ISelectOptions[];
   onMutate: () => void;
-  incomeData?: IGetIncomesFundResponse;
+  incomeData?: IGetIncomeByFund;
   action?: TAction;
   fund_alias?: string;
   fundValue?: number;
@@ -56,9 +56,9 @@ export default function IncomeModal({
 
     setLoading(true);
     try {
-      if (action === "add") await api.client.post("/api/post_income", parsedData);
+      if (action === "add") await api.post("/api/incomes/post-income", parsedData);
       if (action === "edit") {
-        await api.client.patch(`/api/patch_income/${incomeData?.id}`, parsedData);
+        await api.patch(`/api/incomes/patch-income/${incomeData?.id}`, parsedData);
       }
       onMutate();
       toast.success(`Income ${action === "add" ? "added" : "updated"} successfully`);

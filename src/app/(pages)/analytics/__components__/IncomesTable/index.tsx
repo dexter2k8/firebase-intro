@@ -28,7 +28,7 @@ export default function IncomesTable({
   const handleDelete = async () => {
     try {
       setLoading(true);
-      await api.client.delete(`/api/delete_income/${action?.id}`);
+      await api.delete(`/api/incomes/delete-income/${action?.id}`);
       toast.success("Income deleted successfully");
     } catch (error) {
       if (error instanceof AxiosError) {
