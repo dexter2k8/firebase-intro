@@ -32,7 +32,9 @@ export default function Analytics() {
     response: incomesByFund,
     isLoading: isLoadingIncomesByFund,
     mutate,
-  } = useSWR<IResponse<IGetIncomeByFund>>(API.INCOMES.GET_INCOMES_BY_FUND + fund);
+  } = useSWR<IResponse<IGetIncomeByFund>>(
+    fund ? API.INCOMES.GET_INCOMES_BY_FUND + fund : undefined
+  );
 
   const reverseIncomesByFund = incomesByFund?.data.slice().reverse();
 

@@ -22,7 +22,7 @@ export default function Transactions({ fund_alias, fundValue }: IInfiniteListPro
   const [displayedItems, setDisplayedItems] = useState<ITransactionByFund[]>([]);
 
   const { response: transactionsByFund, mutate } = useSWR<IResponse<ITransactionByFund>>(
-    API.TRANSACTIONS.GET_TRANSACTIONS_BY_FUND + fund_alias
+    fund_alias ? API.TRANSACTIONS.GET_TRANSACTIONS_BY_FUND + fund_alias : undefined
   );
 
   useEffect(() => {
