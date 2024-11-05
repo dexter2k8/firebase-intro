@@ -4,15 +4,19 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import ExcelReader from "@/app/(pages)/__components__/ExcelReader";
 import Input from "@/components/Input";
 import Modal from "@/components/Modal";
 import Select from "@/components/Select";
 import SelectDate from "@/components/SelectDate";
+import { useSWR } from "@/hook/useSWR";
 import schema from "@/schemas/validateAddIncome";
 import api from "@/services/api";
 import { currencyToNumber, formatBRL, parseDate } from "@/utils/lib";
+import { API } from "@/utils/paths";
 import styles from "./styles.module.scss";
 import type { SubmitHandler } from "react-hook-form";
+import type { IIncome } from "@/app/api/incomes/get-incomes/types";
 import type { IGetIncomeByFund } from "@/app/api/incomes/get-incomes-by-fund/[alias]/types";
 import type { IPostIncome } from "@/app/api/incomes/post-income/types";
 import type { IModalDefaultProps } from "@/components/Modal/types";
@@ -38,8 +42,9 @@ export default function IncomeModal({
   fund_alias,
   fundValue,
 }: IIncomeModalProps) {
-  const { modal } = styles;
+  const { modal, excel } = styles;
   const [loading, setLoading] = useState(false);
+  const [incomes, setIncomes] = useState<Partial<IIncome>[]>();
   const { control, handleSubmit, setValue, reset } = useForm<IPostIncome>({
     resolver: yupResolver(schema),
   });
@@ -75,6 +80,36 @@ export default function IncomeModal({
     });
     onClose();
   };
+
+  const { response: allIncomes } = useSWR<{ data: IIncome[] }>(
+    incomes?.length ? API.INCOMES.GET_INCOMES : undefined
+  );
+
+  useEffect(() => {
+    if (!incomes || !allIncomes) return;
+
+    // Função auxiliar para verificar se o income já existe na base de dados
+    const incomeFound = (incomeExcel: Partial<IIncome>, incomesBase: IIncome[]) =>
+      incomesBase?.some(
+        (incomeBase) =>
+          incomeBase.updated_at === incomeExcel.updated_at &&
+          incomeBase.income === incomeExcel.income
+      );
+
+    const fetchIncomes = async () => {
+      // Filtra os incomes do excel que já existem na base de dados
+      const filteredIncomes = incomes?.filter((income) => !incomeFound(income, allIncomes.data));
+      if (!filteredIncomes?.length) return;
+      toast.promise(await api.post(API.INCOMES.POST_MULTIPLE_INCOMES, filteredIncomes), {
+        pending: "Adding new incomes...",
+        success: "Incomes added successfully 👌",
+        error: "Something went wrong 🤯",
+      });
+    };
+
+    fetchIncomes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [incomes, allIncomes]);
 
   useEffect(() => {
     setValue("updated_at", parseDate(pastDate) as string);
@@ -130,6 +165,10 @@ export default function IncomeModal({
           id="fund_alias"
         />
       </form>
+
+      <div className={excel}>
+        <ExcelReader onFile={setIncomes} />
+      </div>
     </Modal>
   );
 }

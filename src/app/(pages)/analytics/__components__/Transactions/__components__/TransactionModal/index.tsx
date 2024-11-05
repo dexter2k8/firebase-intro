@@ -23,7 +23,7 @@ import type { IModalDefaultProps } from "@/components/Modal/types";
 import type { ISelectOptions } from "@/components/Select/types";
 
 interface IAddTransactionModalProps extends IModalDefaultProps {
-  onHandleTransaction: () => void;
+  onMutate: () => void;
   transaction?: ITransactionByFund;
   fund_alias?: string;
   fundValue?: number;
@@ -33,7 +33,7 @@ export default function TransactionModal({
   open,
   transaction,
   onClose,
-  onHandleTransaction,
+  onMutate,
   fund_alias,
   fundValue,
 }: IAddTransactionModalProps) {
@@ -61,7 +61,7 @@ export default function TransactionModal({
         await api.patch(`/api/transactions/patch-transaction/${transaction?.id}`, parsedData);
       } else await api.post("/api/transactions/post-transaction", parsedData);
       toast.success(`Transaction ${transaction ? "updated" : "added"} successfully`);
-      onHandleTransaction();
+      onMutate();
     } catch (error) {
       if (error instanceof AxiosError) {
         toast.error(error?.message);
@@ -108,7 +108,7 @@ export default function TransactionModal({
         toast.error(error?.message);
       }
     }
-    onHandleTransaction();
+    onMutate();
     handleCloseModal();
   };
 

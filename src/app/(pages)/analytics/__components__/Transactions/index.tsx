@@ -21,7 +21,7 @@ export default function Transactions({ fund_alias, fundValue }: IInfiniteListPro
   const [idModal, setIdModal] = useState<string>();
   const [displayedItems, setDisplayedItems] = useState<ITransactionByFund[]>([]);
 
-  const { response: transactionsByFund } = useSWR<IResponse<ITransactionByFund>>(
+  const { response: transactionsByFund, mutate } = useSWR<IResponse<ITransactionByFund>>(
     API.TRANSACTIONS.GET_TRANSACTIONS_BY_FUND + fund_alias
   );
 
@@ -66,7 +66,7 @@ export default function Transactions({ fund_alias, fundValue }: IInfiniteListPro
         open={idModal !== undefined}
         transaction={transactionsByFund?.data.find((t) => t.id === idModal)}
         onClose={() => setIdModal(undefined)}
-        onHandleTransaction={() => {}}
+        onMutate={mutate}
         fund_alias={fund_alias}
         fundValue={fundValue}
       />
