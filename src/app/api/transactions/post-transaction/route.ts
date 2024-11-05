@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, Timestamp } from "firebase/firestore";
 import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 import { db } from "@/services/firebase";
@@ -11,11 +11,14 @@ export async function POST(req: NextRequest) {
 
   try {
     const token = cookies().get("funds-explorer-token")?.value;
-    const uid = validateUser(token);
+    const uid = await validateUser(token);
     if (!uid) return NextResponse.json("Invalid token", { status: 401 });
 
     const transactionsRef = collection(db, "transactions");
-    await addDoc(transactionsRef, { ...body, user_id: uid });
+    const { bought_at, ...rest } = body;
+    const boughtAtDate = new Date(bought_at);
+    const date = Timestamp.fromDate(boughtAtDate);
+    await addDoc(transactionsRef, { ...rest, bought_at: date, user_id: uid });
 
     return NextResponse.json("Transaction created successfully", { status: 200 });
   } catch (error) {

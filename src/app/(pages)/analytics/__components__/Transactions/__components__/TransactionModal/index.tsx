@@ -58,8 +58,8 @@ export default function TransactionModal({
     setLoading(true);
     try {
       if (transaction) {
-        await api.patch(`/api/patch_transaction/${transaction?.id}`, parsedData);
-      } else await api.post("/api/post_transaction", parsedData);
+        await api.patch(`/api/transactions/patch-transaction/${transaction?.id}`, parsedData);
+      } else await api.post("/api/transactions/post-transaction", parsedData);
       toast.success(`Transaction ${transaction ? "updated" : "added"} successfully`);
       onHandleTransaction();
     } catch (error) {
@@ -101,7 +101,7 @@ export default function TransactionModal({
   const handleDelete = async (e: MouseEvent) => {
     e.preventDefault();
     try {
-      await api.delete(`/api/delete_transaction/${transaction?.id}`);
+      await api.delete(`/api/transactions/delete-transaction/${transaction?.id}`);
       toast.success("Transaction deleted successfully");
     } catch (error) {
       if (error instanceof AxiosError) {

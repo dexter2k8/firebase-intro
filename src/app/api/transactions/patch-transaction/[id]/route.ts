@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, Timestamp, updateDoc } from "firebase/firestore";
 import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 import { db } from "@/services/firebase";
@@ -17,7 +17,10 @@ export async function PATCH(req: NextRequest) {
     const id = req.nextUrl.pathname.split("/").pop() ?? "";
 
     const transactionsRef = doc(db, "transactions", id);
-    await updateDoc(transactionsRef, { ...body });
+    const { bought_at, ...rest } = body;
+    const boughtAtDate = new Date(bought_at);
+    const date = Timestamp.fromDate(boughtAtDate);
+    await updateDoc(transactionsRef, { ...rest, bought_at: date });
 
     return NextResponse.json("Transaction created successfully", { status: 200 });
   } catch (error) {
