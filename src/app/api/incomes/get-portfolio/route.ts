@@ -50,14 +50,14 @@ export async function GET(req: NextRequest) {
     let transactions = transactionsDoc?.docs.map((doc) => {
       const data = doc.data();
       const boughtAtDate = data.bought_at.toDate();
-      const bought_at = moment(boughtAtDate).format("YYYY-MM-DD");
+      const bought_at = moment(boughtAtDate).utc().format("YYYY-MM-DD");
       return { ...data, bought_at, id: doc.id };
     }) as ITransaction[];
 
     let incomes = incomesDoc?.docs.map((doc) => {
       const data = doc.data();
       const updatedAtDate = data.updated_at.toDate();
-      const updated_at = moment(updatedAtDate).format("YYYY-MM-DD");
+      const updated_at = moment(updatedAtDate).utc().format("YYYY-MM-DD");
       return { ...data, updated_at, id: doc.id };
     }) as IIncome[];
 

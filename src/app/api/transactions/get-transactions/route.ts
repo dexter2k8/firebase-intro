@@ -32,7 +32,7 @@ export async function GET() {
     const data = transactionsDoc?.docs.map((doc) => {
       const data = doc.data();
       const boughtAtDate = data.bought_at.toDate();
-      const bought_at = moment(boughtAtDate).format("YYYY-MM-DD");
+      const bought_at = moment(boughtAtDate).utc().format("YYYY-MM-DD");
       const fundData = funds.find((fund) => fund.alias === data.fund_alias);
       const fund = { ...fundData };
       delete fund.alias;

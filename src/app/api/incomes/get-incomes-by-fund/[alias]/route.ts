@@ -48,7 +48,7 @@ export async function GET(req: NextRequest) {
     const incomes = response?.docs.map((doc) => {
       const data = doc.data();
       const updatedAtDate = data.updated_at.toDate();
-      const updated_at = moment(updatedAtDate).format("YYYY-MM-DD");
+      const updated_at = moment(updatedAtDate).utc().format("YYYY-MM-DD");
       return { ...data, updated_at, id: doc.id };
     }) as IIncome[];
 

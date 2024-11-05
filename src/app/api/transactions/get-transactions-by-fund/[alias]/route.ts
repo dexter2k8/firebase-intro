@@ -28,7 +28,7 @@ export async function GET(req: NextRequest) {
     const data = response?.docs.map((doc) => {
       const data = doc.data();
       const boughtAtDate = data.bought_at.toDate();
-      const bought_at = moment(boughtAtDate).format("YYYY-MM-DD");
+      const bought_at = moment(boughtAtDate).utc().format("YYYY-MM-DD");
       return { ...data, bought_at, id: doc.id };
     }) as ITransactionByFund[];
 
