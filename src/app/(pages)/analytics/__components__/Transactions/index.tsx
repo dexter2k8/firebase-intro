@@ -27,6 +27,7 @@ export default function Transactions({ fund_alias, fundValue }: IInfiniteListPro
 
   useEffect(() => {
     setDisplayedItems(transactionsByFund?.data.slice(0, 5));
+    if (transactionsByFund?.count <= 5) setHasMore(false);
   }, [transactionsByFund]);
 
   const fetchMoreData = () => {
@@ -34,7 +35,6 @@ export default function Transactions({ fund_alias, fundValue }: IInfiniteListPro
       setHasMore(false);
       return;
     }
-
     // Simula a adição de mais 5 itens ou os restantes
     const nextItems = transactionsByFund?.data.slice(
       displayedItems?.length,
