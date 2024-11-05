@@ -1,0 +1,33 @@
+.table_container {
+  background-color: var(--light);
+  border-radius: 0.5rem;
+  overflow: auto hidden;
+  .head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+  }
+  .table_content {
+    max-height: calc(100vh - 24rem);
+    overflow: hidden auto;
+    min-width: 38rem;
+  }
+}
+
+@media (max-width: 1020px) and (min-width: 630px) {
+  .table_container {
+    .table_content {
+      max-height: calc(100vh - 6rem);
+    }
+  }
+}
+
+@media (max-width: 630px) {
+  .table_container {
+    .head {
+      flex-direction: column;
+      align-items: baseline;
+    }
+  }
+}

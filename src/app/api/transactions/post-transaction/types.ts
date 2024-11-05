@@ -1,3 +1,6 @@
-import type { ITransaction } from "../get-transactions/types";
-
-export type TPostTransaction = ITransaction;
+export interface IPostTransaction {
+  bought_at: string;
+  price: string;
+  quantity: number;
+  fund_alias: string;
+}

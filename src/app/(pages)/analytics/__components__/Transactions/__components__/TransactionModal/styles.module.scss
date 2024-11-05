@@ -1,0 +1,20 @@
+.modal {
+  padding: 1rem;
+  .action {
+    display: flex;
+    justify-content: flex-end;
+    button {
+      background-color: transparent;
+      color: var(--red);
+      border: 1px solid var(--red);
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      padding: 0.125rem;
+      cursor: pointer;
+    }
+  }
+
+  label {
+    font-size: 12px;
+  }
+}

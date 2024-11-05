@@ -1,0 +1,40 @@
+.content {
+  display: flex;
+  justify-content: space-between;
+  background-color: var(--grey);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  cursor: pointer;
+
+  .left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    .tag {
+      display: flex;
+      align-items: flex-start;
+      height: 1.25rem;
+      width: fit-content;
+      border-radius: 0.25rem;
+      color: var(--light);
+      padding-inline: 0.5rem;
+      line-height: 1.125rem;
+    }
+  }
+
+  .right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+  }
+}
+
+.modal {
+  padding: 1rem;
+
+  label {
+    font-size: 12px;
+  }
+}
