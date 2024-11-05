@@ -1,4 +1,5 @@
 "use client";
+import dynamic from "next/dynamic";
 import { useQueryState } from "nuqs";
 import { AiFillDollarCircle } from "react-icons/ai";
 import { FaArrowTrendUp, FaArrowUpRightDots } from "react-icons/fa6";
@@ -16,7 +17,7 @@ import type { IGetIncomeByFund } from "@/app/api/incomes/get-incomes-by-fund/[al
 import type { IResponse } from "@/app/api/types";
 import type { ISelectOptions } from "@/components/Select/types";
 
-export default function Analytics() {
+function Analytics() {
   const { analytics, charts, table, cards } = styles;
 
   const { response: selfFunds } = useSWR<IResponse<IFund>>(API.FUNDS.GET_SELF_FUNDS);
@@ -107,3 +108,5 @@ export default function Analytics() {
     </div>
   );
 }
+
+export default dynamic(() => Promise.resolve(Analytics));
