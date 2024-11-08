@@ -57,17 +57,17 @@ export default function Dashboard() {
   //   endDate,
   //   type: "FII",
   // });
-  const { response: incomesFund } = useSWR(API.INCOMES.GET_INCOMES_BY_FUND + "PETR4");
+  // const { response: incomesFund } = useSWR(API.INCOMES.GET_INCOMES_BY_FUND + "PETR4");
   // const { response: transactions } = useSWR(API.TRANSACTIONS.GET_TRANSACTIONS);
   // const { response: portfolioByType } = useSWR(API.INCOMES.GET_PORTFOLIO_BY_TYPE);
   // const { response: transactionsFund } = useSWR(
   //   API.TRANSACTIONS.GET_TRANSACTIONS_BY_FUND + "PETR4"
   // );
-  const { response: funds } = useSWR(API.FUNDS.GET_FUNDS);
+  // const { response: funds } = useSWR(API.FUNDS.GET_FUNDS);
 
-  console.log(funds);
+  const { response: fundsDB } = useSWR(API.FUNDS.GET_FUND_DETAILS + "PETR4");
 
-  console.log(incomesFund);
+  console.log(fundsDB);
 
   return (
     <main>

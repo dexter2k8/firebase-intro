@@ -9,6 +9,7 @@ export const API = {
   GET_SCRAPE: "/api/get-scrape",
   FUNDS: {
     GET_FUNDS: "/api/funds/get-funds",
+    GET_FUND_DETAILS: "/api/funds/get-fund-details/",
     GET_SELF_FUNDS: "/api/funds/get-self-funds",
     POST_FUND: "/api/funds/post-fund",
     PATCH_FUND: "/api/funds/patch-fund/",
