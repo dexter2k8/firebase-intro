@@ -87,6 +87,6 @@ export interface IFundDetailsResponse {
   price: number;
   variation: number;
   dy: number;
-  growth: number;
+  eps: number;
   pvp: number;
 }

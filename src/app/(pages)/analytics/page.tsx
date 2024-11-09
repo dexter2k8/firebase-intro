@@ -11,8 +11,8 @@ import IncomesTable from "./__components__/IncomesTable";
 import PatrimonialEvolution from "./__components__/PatrimonialEvolution";
 import Transactions from "./__components__/Transactions";
 import styles from "./styles.module.scss";
+import type { IFundDetailsResponse } from "@/app/api/funds/get-fund-details/[alias]/types";
 import type { IFund } from "@/app/api/funds/get-funds/types";
-import type { IScrapeResponse } from "@/app/api/get-scrape/types";
 import type { IGetIncomeByFund } from "@/app/api/incomes/get-incomes-by-fund/[alias]/types";
 import type { IResponse } from "@/app/api/types";
 import type { ISelectOptions } from "@/components/Select/types";
@@ -39,14 +39,8 @@ function Analytics() {
 
   const reverseIncomesByFund = incomesByFund?.data.slice().reverse();
 
-  const fundType = selfFunds?.data.find((f) => f.alias === fund)?.type;
-
-  const { response: scrape, isLoading: isLoadingScrape } = useSWR<IScrapeResponse>(
-    fundType && API.GET_SCRAPE,
-    {
-      fund_alias: fund,
-      type: fundType,
-    }
+  const { response: details, isLoading: isLoadingDetails } = useSWR<{ data: IFundDetailsResponse }>(
+    API.FUNDS.GET_FUND_DETAILS + fund
   );
 
   return (
@@ -54,34 +48,38 @@ function Analytics() {
       <main>
         <section className={cards}>
           <Card
-            label="Value"
+            label="Price"
+            tooltip="Current price of the fund. The price is the market value of the fund's assets."
             icon={<AiFillDollarCircle style={{ color: "var(--blue)", fontSize: "1.5rem" }} />}
-            value={scrape?.value}
+            value={details?.data.price}
             currency
-            difference={scrape?.valueGrowth}
-            isLoading={isLoadingScrape}
+            difference={details?.data.variation}
+            isLoading={isLoadingDetails}
           />
-          {scrape?.pvp && (
+          {details?.data.pvp && (
             <Card
               label="P/VP"
+              tooltip="Price to book value (P/VP). P/VP is a ratio that compares a company's price to its book value, which is the value of its assets minus its liabilities."
               icon={<RiExchangeFundsFill style={{ color: "var(--blue)", fontSize: "1.5rem" }} />}
-              value={scrape?.pvp}
-              isLoading={isLoadingScrape}
+              value={details?.data.pvp}
+              isLoading={isLoadingDetails}
             />
           )}
           <Card
-            label="DY"
+            label="DY (12M)"
+            tooltip="Dividend Yield (12 Months). Dividend yield is a measure of a company's ability to pay dividends to shareholders."
             icon={<FaArrowUpRightDots style={{ color: "var(--blue)", fontSize: "1.25rem" }} />}
-            value={scrape?.dy}
+            value={details?.data.dy}
             suffix="%"
-            isLoading={isLoadingScrape}
+            isLoading={isLoadingDetails}
           />
           <Card
-            label="Valuing (12M)"
+            label="EPS (12M)"
+            tooltip="Earnings per share (12 months). Represents a company's total net income over the past 12 months, divided by the total number of shares outstanding."
             icon={<FaArrowTrendUp style={{ color: "var(--blue)", fontSize: "1.25rem" }} />}
-            value={scrape?.growth}
+            value={details?.data.eps}
             suffix="%"
-            isLoading={isLoadingScrape}
+            isLoading={isLoadingDetails}
           />
         </section>
 
@@ -91,7 +89,7 @@ function Analytics() {
             profits={reverseIncomesByFund}
             isLoading={isLoadingIncomesByFund}
           />
-          <Transactions fund_alias={fund} fundValue={scrape?.value} />
+          <Transactions fund_alias={fund} fundValue={details?.data.price} />
         </section>
 
         <section className={table}>
@@ -101,7 +99,7 @@ function Analytics() {
             isLoadingProfits={isLoadingIncomesByFund}
             onMutate={mutate}
             fund_alias={fund}
-            fundValue={scrape?.value}
+            fundValue={details?.data.price}
           />
         </section>
       </main>

@@ -1,6 +1,7 @@
 "use client";
 import CountUp from "react-countup";
 import { MdOutlineArrowDropDown, MdOutlineArrowDropUp } from "react-icons/md";
+import { Tooltip } from "react-tooltip";
 import Skeleton from "@/components/Skeleton";
 import { formatCurrency } from "@/utils/lib";
 import styles from "./styles.module.scss";
@@ -8,6 +9,7 @@ import styles from "./styles.module.scss";
 interface ICardProps {
   label: string;
   value: number;
+  tooltip?: string;
   currency?: boolean;
   decimals?: number;
   suffix?: string;
@@ -18,6 +20,7 @@ interface ICardProps {
 
 export default function Card({
   label,
+  tooltip,
   value = 0,
   currency,
   decimals = 2,
@@ -27,12 +30,18 @@ export default function Card({
   isLoading,
 }: ICardProps) {
   const { card, title, diff } = styles;
+  const id = Math.random().toString(36).slice(2);
   return (
     <div className={card}>
       <div>
         <div className={title}>
           {icon}
-          <h4>{label}</h4>
+          <h4 data-tooltip-id={id}>{label}</h4>
+          {tooltip && (
+            <Tooltip id={id} style={{ maxWidth: "18rem" }}>
+              {tooltip}
+            </Tooltip>
+          )}
         </div>
         {isLoading ? (
           <Skeleton height="2rem" width="9rem" />

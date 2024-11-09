@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import yahooFinance from "yahoo-finance2";
 import { validateUser } from "@/utils/lib";
 import type { NextRequest } from "next/server";
-import type { IFundDetails } from "./types";
+import type { IFundDetails, IFundDetailsResponse } from "./types";
 
 export async function GET(req: NextRequest) {
   try {
@@ -16,19 +16,17 @@ export async function GET(req: NextRequest) {
 
     const quote = (await yahooFinance.quote(`${alias}.SA`)) as unknown as IFundDetails;
 
-    // const data: IFundDetailsResponse = {
-    //   alias: quote.symbol.split(".")[0],
-    //   longName: quote.longName,
-    //   price: quote.regularMarketPrice,
-    //   variation: quote.regularMarketChangePercent,
-    //   pvp: quote.priceToBook,
-    //   dy: quote.trailingAnnualDividendYield * 100,
-    //   growth: quote.fiftyTwoWeekChangePercent,
-    // };
+    const data: IFundDetailsResponse = {
+      alias: quote.symbol.split(".")[0],
+      longName: quote.longName,
+      price: quote.regularMarketPrice,
+      variation: +quote.regularMarketChangePercent.toFixed(2),
+      pvp: quote.priceToBook,
+      dy: quote.trailingAnnualDividendYield * 100 || quote.dividendYield,
+      eps: quote.epsTrailingTwelveMonths,
+    };
 
-    const count = 1;
-
-    return NextResponse.json({ quote, count }, { status: 200 });
+    return NextResponse.json({ data }, { status: 200 });
   } catch (error) {
     if (error instanceof AxiosError) {
       return NextResponse.json(error.response?.data.message, { status: error.response?.status });
