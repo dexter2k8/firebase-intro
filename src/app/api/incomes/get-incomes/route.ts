@@ -1,5 +1,6 @@
 import { AxiosError } from "axios";
 import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
+import moment from "moment";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { db } from "@/services/firebase";
@@ -17,7 +18,20 @@ export async function GET() {
     const q = query(incomesRef, where("user_id", "==", uid), orderBy("updated_at", "desc"));
     const response = await getDocs(q);
 
-    const data = response?.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as IIncome[];
+    const data = response?.docs.map((docData) => {
+      const doc = docData.data();
+      const updatedAtDate = doc.updated_at.toDate();
+      const updated_at = moment(updatedAtDate).utc().format("YYYY-MM-DD");
+
+      return {
+        id: docData.id,
+        price: doc.price,
+        updated_at,
+        income: doc.income,
+        fund_alias: doc.fund_alias,
+        user_id: doc.user_id,
+      };
+    }) as IIncome[];
     const count = data?.length;
 
     return NextResponse.json({ data, count }, { status: 200 });
