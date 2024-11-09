@@ -26,7 +26,7 @@ export default function Header({ menuClick, label }: IHeaderProps) {
       setLoading(false);
     };
     getUserData();
-  }, []);
+  }, [getUser, setValue]);
 
   return (
     <header className={header}>

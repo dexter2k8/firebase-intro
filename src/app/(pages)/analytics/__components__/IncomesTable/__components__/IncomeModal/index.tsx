@@ -100,14 +100,16 @@ export default function IncomeModal({
       // Filtra os incomes do excel que já existem na base de dados
       const filteredIncomes = incomes?.filter((income) => !incomeFound(income, allIncomes.data));
       if (!filteredIncomes?.length) return;
-      toast.promise(await api.post(API.INCOMES.POST_MULTIPLE_INCOMES, filteredIncomes), {
+      toast.promise(api.post(API.INCOMES.POST_MULTIPLE_INCOMES, filteredIncomes), {
         pending: "Adding new incomes...",
         success: "Incomes added successfully 👌",
         error: "Something went wrong 🤯",
       });
     };
 
+    handleCloseModal();
     fetchIncomes();
+    onMutate();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [incomes, allIncomes]);
 

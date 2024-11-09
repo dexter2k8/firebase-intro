@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import moment from "moment";
 import * as XLSX from "xlsx";
 import styles from "./styles.module.scss";
@@ -12,6 +12,7 @@ interface IExcelReaderProps {
 export default function ExcelReader({ onFile }: IExcelReaderProps) {
   const { reader } = styles;
   const [incomesData, setIncomesData] = useState<IExcelFileProps[]>();
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     if (incomesData) {
@@ -44,12 +45,16 @@ export default function ExcelReader({ onFile }: IExcelReaderProps) {
         setIncomesData(json as IExcelFileProps[]);
       };
       reader.readAsArrayBuffer(file);
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
     }
   };
   return (
     <div className={reader}>
       <small>Get excel incomes</small>
-      <input type="file" accept=".xlsx, .xls, .csv" onChange={handleFile} />
+      <input ref={fileInputRef} type="file" accept=".xlsx, .xls, .csv" onChange={handleFile} />
     </div>
   );
 }

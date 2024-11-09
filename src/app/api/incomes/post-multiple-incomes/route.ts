@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { collection, doc, writeBatch } from "firebase/firestore";
+import { collection, doc, Timestamp, writeBatch } from "firebase/firestore";
 import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
 import { db } from "@/services/firebase";
@@ -25,9 +25,11 @@ export async function POST(req: NextRequest) {
         (res) => res.json()
       );
       const price = response?.results[0].regularMarketPrice ?? 0;
+      const updatedAtDate = new Date(income.updated_at!);
+      const updated_at = Timestamp.fromDate(updatedAtDate);
 
       const docRef = doc(incomesRef);
-      batch.set(docRef, { ...income, user_id: uid, price });
+      batch.set(docRef, { ...income, user_id: uid, price, updated_at });
     }
 
     await batch.commit();

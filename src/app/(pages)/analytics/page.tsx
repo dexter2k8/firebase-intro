@@ -40,7 +40,7 @@ function Analytics() {
   const reverseIncomesByFund = incomesByFund?.data.slice().reverse();
 
   const { response: details, isLoading: isLoadingDetails } = useSWR<{ data: IFundDetailsResponse }>(
-    API.FUNDS.GET_FUND_DETAILS + fund
+    fund ? API.FUNDS.GET_FUND_DETAILS + fund : undefined
   );
 
   return (
