@@ -1,0 +1,12 @@
+.modal {
+  padding: 1rem;
+  .check {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  label {
+    font-size: 12px;
+  }
+}

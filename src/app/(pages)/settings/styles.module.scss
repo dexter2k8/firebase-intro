@@ -1,0 +1,20 @@
+@import "../dashboard/styles.module.scss";
+
+.settings {
+  @include container();
+  main {
+    width: 100%;
+    background-color: var(--light);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    overflow: auto;
+  }
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-block: 0.25rem;
+  padding: 1rem;
+}
