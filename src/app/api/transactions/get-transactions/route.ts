@@ -39,9 +39,18 @@ export async function GET() {
       return { ...data, ...fund, bought_at, id: doc.id };
     }) as ITransaction[];
 
+    const csvData = data?.map((transaction) => ({
+      id: transaction.id,
+      bought_at: transaction.bought_at,
+      price: transaction.price,
+      quantity: transaction.quantity,
+      user_id: transaction.user_id,
+      fund_alias: transaction.fund_alias,
+    }));
+
     const count = data?.length;
 
-    return Response.json({ data, count }, { status: 200 });
+    return Response.json({ data, csvData, count }, { status: 200 });
   } catch (error) {
     if (error instanceof AxiosError) {
       return NextResponse.json(error.response?.data.message, { status: error.response?.status });

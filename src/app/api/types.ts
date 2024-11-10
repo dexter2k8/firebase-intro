@@ -1,5 +1,6 @@
 export interface IResponse<T> {
   data: T[];
+  csvData?: T[];
   count: number;
 }
 

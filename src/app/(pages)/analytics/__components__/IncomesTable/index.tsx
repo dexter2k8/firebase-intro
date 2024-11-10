@@ -3,7 +3,7 @@ import { useState } from "react";
 import { AxiosError } from "axios";
 import { CiSquarePlus } from "react-icons/ci";
 import { toast } from "react-toastify";
-import ExportIncomesCSV from "@/app/(pages)/__components__/CsvExport";
+import ExportCSV from "@/app/(pages)/__components__/CsvExport";
 import Modal from "@/components/Modal";
 import Table from "@/components/Table";
 import api from "@/services/api";
@@ -47,7 +47,7 @@ export default function IncomesTable({
         <div className={head}>
           <h4>Incomes Table</h4>
           <div className={head}>
-            <ExportIncomesCSV fileName="incomes.csv" />
+            <ExportCSV table="incomes" fileName="incomes.csv" />
             <CiSquarePlus
               size="2rem"
               onClick={() => setAction({ action: "add", id: undefined })}

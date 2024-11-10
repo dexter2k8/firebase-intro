@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { CiSquarePlus } from "react-icons/ci";
 import InfiniteScroll from "react-infinite-scroll-component";
+import ExportCSV from "@/app/(pages)/__components__/CsvExport";
 import LayoutCharts from "@/app/(pages)/dashboard/__components__/Charts/layout";
 import Skeleton from "@/components/Skeleton";
 import { useSWR } from "@/hook/useSWR";
@@ -49,7 +50,10 @@ export default function Transactions({ fund_alias, fundValue }: IInfiniteListPro
     <LayoutCharts
       title="Transactions"
       sideControls={
-        <CiSquarePlus size="2rem" onClick={() => setIdModal("")} style={{ cursor: "pointer" }} />
+        <div style={{ display: "flex", gap: "1rem" }}>
+          <ExportCSV table="transactions" fileName="transactions.csv" />
+          <CiSquarePlus size="2rem" onClick={() => setIdModal("")} style={{ cursor: "pointer" }} />
+        </div>
       }
     >
       <InfiniteScroll
