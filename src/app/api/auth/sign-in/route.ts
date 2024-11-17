@@ -2,9 +2,11 @@ import { AxiosError } from "axios";
 import {
   browserLocalPersistence,
   setPersistence,
+  signInWithCustomToken,
   signInWithEmailAndPassword,
   updateProfile,
 } from "firebase/auth";
+import admin from "firebase-admin";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/services/firebase";
@@ -16,6 +18,15 @@ export async function POST(request: NextRequest) {
     const { email, password, name, avatar } = body;
 
     await signInWithEmailAndPassword(auth, email, password);
+    const uid = auth.currentUser?.uid as string;
+    const token = await admin.auth().createCustomToken(uid);
+
+    const idToken = await signInWithCustomToken(auth, token)
+      .then((userCredential) => userCredential.user.getIdToken())
+      .catch((error) => {
+        console.error("Authentication failed:", error);
+      });
+
     //setPersistence force browser to keep the session active when you reload page
     // you can choose between browserLocalPersistence and browserSessionPersistence
     await setPersistence(auth, browserLocalPersistence);
@@ -28,10 +39,9 @@ export async function POST(request: NextRequest) {
         });
       }
 
-      const token = await auth.currentUser.getIdToken();
       cookies().set({
         name: "funds-explorer-token",
-        value: token,
+        value: idToken as string,
         httpOnly: true,
         maxAge: 60 * 60 * 24, // 1 day
         path: "/",

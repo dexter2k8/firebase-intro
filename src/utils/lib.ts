@@ -79,6 +79,7 @@ export async function validateUser(token?: string): Promise<string | undefined> 
   if (!token) return undefined;
 
   const decoded = jwt.decode(token, { complete: true }) as JwtPayload;
+
   if (!decoded?.header.kid || !validKids.includes(decoded?.header.kid)) {
     return undefined;
   }

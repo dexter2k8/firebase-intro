@@ -1,37 +1,44 @@
-import { onIdTokenChanged } from "firebase/auth";
-import { cookies } from "next/headers";
+import { signInWithCustomToken } from "firebase/auth";
+import admin from "firebase-admin";
+import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 import { auth } from "@/services/firebase";
-import { validateUser } from "@/utils/lib";
+import type { JwtPayload } from "jsonwebtoken";
 import type { NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const { token } = body;
-  if (!token) return NextResponse.json(false, { status: 200 });
+  if (!token) return NextResponse.json(undefined, { status: 200 });
 
   try {
-    if (!validateUser(token)) return NextResponse.json(false, { status: 200 });
+    const verifiedToken: string | undefined = await admin
+      .auth()
+      .verifyIdToken(token)
+      .then(() => token)
+      .catch(async (err) => {
+        if (err.code === "auth/id-token-expired") {
+          const decoded = jwt.decode(token, { complete: true }) as JwtPayload;
+          const uid = decoded?.payload.user_id;
+          if (!uid) return undefined;
 
-    const isAuthenticated = await new Promise<boolean>((resolve) => {
-      onIdTokenChanged(auth, async (user) => {
-        if (user) {
-          const newToken = await user.getIdToken();
-          cookies().set({
-            name: "funds-explorer-token",
-            value: newToken,
-            httpOnly: true,
-            maxAge: 60 * 60 * 24, // 1 day
-            path: "/",
-          });
-          resolve(true); // Usuário autenticado
+          const newToken = await admin.auth().createCustomToken(uid);
+
+          const idToken = await signInWithCustomToken(auth, newToken)
+            .then((userCredential) => userCredential.user.getIdToken())
+            .catch((error) => {
+              console.error("Authentication failed:", error);
+              return undefined;
+            });
+
+          return idToken;
         } else {
-          resolve(false); // Nenhum usuário autenticado
+          console.error(err);
+          return undefined;
         }
       });
-    });
 
-    return NextResponse.json(isAuthenticated, { status: 200 });
+    return NextResponse.json(verifiedToken, { status: 200 });
   } catch (error) {
     console.error("Erro ao verificar token de App Check:", error);
     return NextResponse.json({ message: "Falha ao verificar o token." }, { status: 500 });

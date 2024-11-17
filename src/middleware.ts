@@ -13,13 +13,18 @@ export async function middleware(req: NextRequest) {
   }
 
   if (token) {
-    const validToken = await api.post(req.nextUrl.origin + API.AUTH.VERIFY_TOKEN, { token });
+    const verifiedToken = await api.post(req.nextUrl.origin + API.AUTH.VERIFY_TOKEN, { token });
 
-    if (!validToken.data) {
+    if (verifiedToken.data === undefined) {
       const response = NextResponse.redirect(loginUrl);
       response.cookies.delete("funds-explorer-token");
       return response;
+    } else if (verifiedToken.data !== token) {
+      const response = NextResponse.next();
+      response.cookies.set("funds-explorer-token", verifiedToken.data);
+      return response;
     }
+
     if (pathname === "/") {
       const dashboardUrl = new URL("/dashboard", req.url);
       return NextResponse.redirect(dashboardUrl);
