@@ -16,6 +16,26 @@ export default function ExcelReader({ onFile }: IExcelReaderProps) {
 
   useEffect(() => {
     if (incomesData) {
+      const hasPagamento = incomesData.every((obj) => "Pagamento" in obj);
+      const hasProduto = incomesData.every((obj) => "Produto" in obj);
+      const hasTipoEvento = incomesData.every((obj) => "Tipo de Evento" in obj);
+      const hasInstituicao = incomesData.every((obj) => "Instituição" in obj);
+      const hasQuantidade = incomesData.every((obj) => "Quantidade" in obj);
+      const hasPrecoUnitario = incomesData.every((obj) => "Preço unitário" in obj);
+      const hasValorLiquido = incomesData.every((obj) => "Valor líquido" in obj);
+
+      if (
+        !hasPagamento ||
+        !hasProduto ||
+        !hasTipoEvento ||
+        !hasInstituicao ||
+        !hasQuantidade ||
+        !hasPrecoUnitario ||
+        !hasValorLiquido
+      ) {
+        return alert("Arquivo inválido");
+      }
+
       const parsedIncomes = incomesData.map((item: IExcelFileProps) => {
         const parsedDate = moment(item?.Pagamento, "DD/MM/YYYY").format("YYYY-MM-DD");
         const parsedAlias = item?.Produto?.split(" ")[0];
@@ -54,7 +74,7 @@ export default function ExcelReader({ onFile }: IExcelReaderProps) {
   return (
     <div className={reader}>
       <small>Get excel incomes</small>
-      <input ref={fileInputRef} type="file" accept=".xlsx, .xls, .csv" onChange={handleFile} />
+      <input ref={fileInputRef} type="file" accept=".xlsx" onChange={handleFile} />
     </div>
   );
 }
