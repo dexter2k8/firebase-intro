@@ -20,13 +20,13 @@ export async function middleware(req: NextRequest) {
 
     const verifiedToken = await response.json();
 
-    if (verifiedToken.data === undefined) {
+    if (verifiedToken === undefined) {
       const response = NextResponse.redirect(loginUrl);
       response.cookies.delete("funds-explorer-token");
       return response;
-    } else if (verifiedToken.data !== token) {
+    } else if (verifiedToken !== token) {
       const response = NextResponse.next();
-      response.cookies.set("funds-explorer-token", verifiedToken.data);
+      response.cookies.set("funds-explorer-token", verifiedToken);
       return response;
     }
 
