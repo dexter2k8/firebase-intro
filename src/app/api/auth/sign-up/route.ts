@@ -1,5 +1,6 @@
 import { AxiosError } from "axios";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import admin from "firebase-admin";
 // import admin from "firebase-admin";
 import { NextResponse } from "next/server";
 import { auth } from "@/services/firebase";
@@ -19,8 +20,8 @@ export async function POST(request: NextRequest) {
         photoURL: avatar,
       });
     }
-    // const uid = user.uid;
-    // await admin.auth().setCustomUserClaims(uid, { role: "user" });
+    const uid = user.uid;
+    await admin.auth().setCustomUserClaims(uid, { role: "user" });
 
     return NextResponse.json(auth.currentUser, { status: 200 });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -1,8 +1,7 @@
 import { AxiosError } from "axios";
-import { onAuthStateChanged } from "firebase/auth";
+import admin from "firebase-admin";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { auth } from "@/services/firebase";
 import type { IGetCurrentUser } from "@/store/useAuth/types";
 
 export async function GET() {
@@ -10,24 +9,17 @@ export async function GET() {
   if (!token) return NextResponse.json({ message: "Token não fornecido." }, { status: 400 });
 
   try {
-    const authenticated = await new Promise<boolean>((resolve) => {
-      onAuthStateChanged(auth, (user) => {
-        if (user) {
-          resolve(true);
-        } else {
-          resolve(false); // Nenhum usuário autenticado
-        }
-      });
-    });
+    const authenticated = await admin.auth().verifyIdToken(token);
+
     if (!authenticated) {
       return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
     }
 
     const user: IGetCurrentUser = {
-      name: auth.currentUser?.displayName as string,
-      email: auth.currentUser?.email as string,
-      avatar: auth.currentUser?.photoURL as string,
-      uid: auth.currentUser?.uid as string,
+      name: authenticated?.name as string,
+      email: authenticated?.email as string,
+      avatar: authenticated?.picture as string,
+      uid: authenticated?.uid,
     };
 
     return NextResponse.json(user, { status: 200 });
