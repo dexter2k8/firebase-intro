@@ -44,3 +44,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Falha ao verificar o token." }, { status: 500 });
   }
 }
+
+export const config = {
+  runtime: "nodejs",
+};
