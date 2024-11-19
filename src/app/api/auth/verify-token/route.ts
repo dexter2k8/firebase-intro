@@ -1,9 +1,8 @@
 import { signInWithCustomToken } from "firebase/auth";
 import admin from "firebase-admin";
-import jwt from "jsonwebtoken";
 import { NextResponse } from "next/server";
 import { auth } from "@/services/firebase";
-import type { JwtPayload } from "jsonwebtoken";
+import { decodeToken } from "@/utils/lib";
 import type { NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -18,8 +17,8 @@ export async function POST(req: NextRequest) {
       .then(() => token)
       .catch(async (err) => {
         if (err.code === "auth/id-token-expired") {
-          const decoded = jwt.decode(token, { complete: true }) as JwtPayload;
-          const uid = decoded?.payload.user_id;
+          const payload = decodeToken(token);
+          const uid = payload.user_id;
           if (!uid) return undefined;
 
           const newToken = await admin.auth().createCustomToken(uid);

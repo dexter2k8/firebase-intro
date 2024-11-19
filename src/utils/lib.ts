@@ -92,3 +92,10 @@ export async function validateUser(token?: string): Promise<string | undefined> 
 
   return decoded?.payload.user_id;
 }
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function decodeToken(token: string): any {
+  const [, payload] = token.split(".");
+  const decodedPayload = Buffer.from(payload, "base64").toString("utf-8");
+  return JSON.parse(decodedPayload);
+}
