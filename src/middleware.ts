@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-// import { API } from "./utils/paths";
+import { API } from "./utils/paths";
 import type { NextRequest } from "next/server";
 
 export async function middleware(req: NextRequest) {
@@ -12,14 +12,13 @@ export async function middleware(req: NextRequest) {
   }
 
   if (token) {
-    // const response = await fetch(`${req.nextUrl.origin}${API.AUTH.VERIFY_TOKEN}`, {
-    //   method: "POST",
-    //   headers: { "Content-Type": "application/json" },
-    //   body: JSON.stringify({ token }),
-    // });
+    const response = await fetch(`${req.nextUrl.origin}${API.AUTH.VERIFY_TOKEN}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token }),
+    });
 
-    // const verifiedToken = await response.json();
-    const verifiedToken = token;
+    const verifiedToken = await response.json();
 
     if (verifiedToken === undefined) {
       const response = NextResponse.redirect(loginUrl);
