@@ -1,11 +1,5 @@
 import { AxiosError } from "axios";
-import {
-  browserLocalPersistence,
-  setPersistence,
-  signInWithCustomToken,
-  signInWithEmailAndPassword,
-  updateProfile,
-} from "firebase/auth";
+import { signInWithCustomToken, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 import admin from "firebase-admin";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
@@ -26,10 +20,6 @@ export async function POST(request: NextRequest) {
       .catch((error) => {
         console.error("Authentication failed:", error);
       });
-
-    //setPersistence force browser to keep the session active when you reload page
-    // you can choose between browserLocalPersistence and browserSessionPersistence
-    await setPersistence(auth, browserLocalPersistence);
 
     if (auth.currentUser) {
       if (name) {

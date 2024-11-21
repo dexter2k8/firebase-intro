@@ -43,5 +43,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ message: "Falha ao verificar o token." }, { status: 500 });
   }
 }
-
+// This line indicates that this function should be executed in Node.js environment.
+// It's necessary to use the "edge" runtime, necessary to don't crash on vercel
 export const runtime = "nodejs";

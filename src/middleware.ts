@@ -27,7 +27,7 @@ export async function middleware(req: NextRequest) {
       return response;
     } else if (verifiedToken.message !== token) {
       const response = NextResponse.next();
-      response.cookies.set("funds-explorer-token", verifiedToken);
+      response.cookies.set("funds-explorer-token", verifiedToken.message);
       return response;
     }
 

@@ -22,9 +22,11 @@ function Analytics() {
 
   const { response: selfFunds } = useSWR<IResponse<IFund>>(API.FUNDS.GET_SELF_FUNDS);
 
-  const [fund] = useQueryState("fund", { defaultValue: selfFunds?.data[0]?.alias });
+  const orderedFunds = selfFunds?.data.sort((a, b) => a.alias.localeCompare(b.alias));
 
-  const funds: ISelectOptions[] = selfFunds?.data.map((fund) => ({
+  const [fund] = useQueryState("fund", { defaultValue: orderedFunds?.[0]?.alias });
+
+  const funds: ISelectOptions[] = orderedFunds?.map((fund) => ({
     value: fund.alias,
     label: fund.alias,
   }));

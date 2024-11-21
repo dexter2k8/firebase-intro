@@ -30,5 +30,6 @@ export async function GET() {
     return NextResponse.json("Internal Server Error", { status: 500 });
   }
 }
-
+// This line indicates that this function should be executed in Node.js environment.
+// It's necessary to use the "edge" runtime, necessary to firebase-admin don't crash on vercel
 export const runtime = "nodejs";

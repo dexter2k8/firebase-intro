@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { db } from "@/services/firebase";
@@ -13,7 +13,8 @@ export async function GET() {
     if (!uid) return NextResponse.json("Invalid token", { status: 401 });
 
     const fundsRef = collection(db, "funds");
-    const response = await getDocs(fundsRef);
+    const q = query(fundsRef, orderBy("alias"));
+    const response = await getDocs(q);
 
     const data = response?.docs.map((doc) => ({ ...doc.data(), alias: doc.id })) as IFund[];
     const count = data?.length;
