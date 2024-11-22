@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { MdDashboard, MdLogout, MdOutlineSettings, MdOutlineTableChart } from "react-icons/md";
 import { useAuth } from "@/store/useAuth";
 import Logo from "../../../../../public/assets/logo";
@@ -18,6 +19,12 @@ interface ISidebarProps {
 export default function Sidebar({ collapsed, pathname }: ISidebarProps) {
   const { sidebar, head, items, foot } = styles;
   const { signOut } = useAuth();
+  const router = useRouter();
+
+  const handleClick = async () => {
+    const result = await signOut();
+    if (result) router.replace("/");
+  };
 
   return (
     <nav className={sidebar} data-collapsed={collapsed}>
@@ -40,7 +47,7 @@ export default function Sidebar({ collapsed, pathname }: ISidebarProps) {
       </ul>
 
       <div className={foot}>
-        <Link href="/" onClick={signOut}>
+        <Link href="/" onClick={handleClick}>
           <MdLogout />
           <span>Logout</span>
         </Link>

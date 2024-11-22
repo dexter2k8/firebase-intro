@@ -30,11 +30,13 @@ async function SignUp({ email, password, name, avatar }: ISignUpProps) {
 
 async function SignOut() {
   try {
-    await api.get(API.AUTH.SIGN_OUT);
+    const response = await api.get(API.AUTH.SIGN_OUT);
+    if (response.status === 200) return true;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     toast.error(error?.message);
   }
+  return false;
 }
 
 async function GetUser() {
