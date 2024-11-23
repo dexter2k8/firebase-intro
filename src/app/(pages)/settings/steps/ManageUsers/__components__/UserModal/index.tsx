@@ -34,7 +34,7 @@ export default function UserModal({ open, userData, onClose, action, onMutate }:
     setLoading(true);
     try {
       if (action === "add") await api.post("/api/auth/sign-up", data);
-      if (action === "edit") await api.patch(`/api/users/patch_user/${userData?.uid}`, data);
+      if (action === "edit") await api.patch(`/api/auth/patch-user/${userData?.uid}`, data);
       onMutate();
       toast.success(`User ${action === "add" ? "added" : "updated"} successfully`);
     } catch (error) {
@@ -100,7 +100,7 @@ export default function UserModal({ open, userData, onClose, action, onMutate }:
           <Tooltip id="checkbox-password" style={{ maxWidth: "12rem" }} />
         </div>
 
-        <label htmlFor="avatar">Avatar URL</label>
+        <label htmlFor="avatar">Avatar URL (optional)</label>
         <Input.Controlled type="search" control={control} name="avatar" id="avatar" />
       </form>
     </Modal>
