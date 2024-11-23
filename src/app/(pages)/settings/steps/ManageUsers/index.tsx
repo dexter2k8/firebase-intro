@@ -25,7 +25,8 @@ export function ManageUsers() {
   const handleDelete = async () => {
     try {
       setLoading(true);
-      await api.delete(`/api/users/delete-user/${action?.id}`);
+      await api.delete(`/api/auth/delete-user/${action?.id}`);
+
       toast.success("User deleted successfully");
     } catch (error) {
       if (error instanceof AxiosError) {
