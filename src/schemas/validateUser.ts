@@ -6,9 +6,11 @@ export const schemaEdit = yup.object({
   password: yup
     .string()
     .min(6, "Password must be at least 6 characters")
-    .matches(/(\d)/, "Password must contain a number"),
-  admin: yup.string().required('"admin" is required').oneOf(["true", "false"]),
+    .matches(/(\d)/, "Password must contain a number")
+    .optional(),
   avatar: yup.string().optional(),
+  uid: yup.string().optional(),
+  role: yup.string().optional(),
 });
 
 export const schemaPost = yup.object({
@@ -19,6 +21,7 @@ export const schemaPost = yup.object({
     .required("Password is required")
     .min(6, "Password must be at least 6 characters")
     .matches(/(\d)/, "Password must contain a number"),
-  admin: yup.string().required('"admin" is required').oneOf(["true", "false"]),
   avatar: yup.string().optional(),
+  uid: yup.string().optional(),
+  role: yup.string().optional(),
 });

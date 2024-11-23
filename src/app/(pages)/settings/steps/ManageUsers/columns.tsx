@@ -1,13 +1,11 @@
 import Image from "next/image";
-// import TableActions from "@/components/TableActions";
-// import type { IUsers } from "@/app/api/get_users/types";
-// import type { GridColDef } from "@/components/Table/types";
-// import type { IActions } from "@/components/TableActions/types";
+import TableActions from "@/components/TableActions";
+import type { TGridColDef } from "@/components/Table/types";
+import type { IActions } from "@/components/TableActions/types";
+import type { IGetCurrentUser } from "@/store/useAuth/types";
 
-export function getColumns() {
-  // export function getColumns({ onAction }: IActions) {
-  const columns = [
-    // const columns: GridColDef<IUsers>[] = [
+export function getColumns({ onAction }: IActions) {
+  const columns: TGridColDef<IGetCurrentUser>[] = [
     {
       field: "name",
       label: "NAME",
@@ -17,16 +15,9 @@ export function getColumns() {
       label: "EMAIL",
     },
     {
-      field: "admin",
-      label: "ADMIN",
-      render: (value: string) => <p>{value ? "TRUE" : "FALSE"}</p>,
-      // render: (value) => <p>{value ? "TRUE" : "FALSE"}</p>,
-    },
-    {
       field: "avatar",
       label: "AVATAR",
-      render(value: string) {
-        // render(value) {
+      render(value) {
         return (
           <>
             {value ? (
@@ -44,12 +35,12 @@ export function getColumns() {
         );
       },
     },
-    // {
-    //   field: "actions" as keyof IUsers,
-    //   label: "ACTIONS",
-    //   valueGetter: (row) => row.id,
-    //   render: (value) => <TableActions id={value as string} onAction={onAction} />,
-    // },
+    {
+      field: "actions" as keyof IGetCurrentUser,
+      label: "ACTIONS",
+      valueGetter: (row) => row.uid,
+      render: (value) => <TableActions id={value as string} onAction={onAction} />,
+    },
   ];
 
   return columns;

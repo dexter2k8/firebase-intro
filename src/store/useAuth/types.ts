@@ -25,7 +25,8 @@ export interface ISignUpProps extends ISignInProps {
 export interface IGetCurrentUser {
   name: string;
   email: string;
-  avatar: string;
-  uid: string;
-  role: string;
+  avatar?: string;
+  uid?: string;
+  role?: string;
+  password?: string;
 }

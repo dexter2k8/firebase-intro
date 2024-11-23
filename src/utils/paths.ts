@@ -4,6 +4,7 @@ export const API = {
     SIGN_UP: "/api/auth/sign-up",
     SIGN_OUT: "/api/auth/sign-out",
     GET_USER: "/api/auth/get-user",
+    LIST_USERS: "/api/auth/list-users",
     VERIFY_TOKEN: "/api/auth/verify-token",
   },
   GET_SCRAPE: "/api/get-scrape",
