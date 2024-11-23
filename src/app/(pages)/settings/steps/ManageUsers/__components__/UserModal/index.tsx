@@ -33,7 +33,7 @@ export default function UserModal({ open, userData, onClose, action, onMutate }:
   const onSubmit: SubmitHandler<IGetCurrentUser> = async (data) => {
     setLoading(true);
     try {
-      if (action === "add") await api.post("/api/users/post_user", data);
+      if (action === "add") await api.post("/api/auth/sign-up", data);
       if (action === "edit") await api.patch(`/api/users/patch_user/${userData?.uid}`, data);
       onMutate();
       toast.success(`User ${action === "add" ? "added" : "updated"} successfully`);
