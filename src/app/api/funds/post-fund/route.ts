@@ -8,6 +8,7 @@ import type { TPostFund } from "./types";
 
 export async function POST(req: NextRequest) {
   const body: TPostFund = await req.json();
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { alias, ...rest } = body;
 
   try {
@@ -17,7 +18,7 @@ export async function POST(req: NextRequest) {
 
     const fundsRef = collection(db, "funds");
     const newFundRef = doc(fundsRef, alias);
-    await setDoc(newFundRef, { ...rest });
+    await setDoc(newFundRef, body);
 
     return NextResponse.json("Fund created successfully", { status: 200 });
   } catch (error) {

@@ -1,15 +1,13 @@
 import { Tooltip } from "react-tooltip";
-// import TableActions from "@/components/TableActions";
-// import { useAuth } from "@/store/useAuth";
-// import type { IFunds } from "@/app/api/get_funds/types";
-// import type { GridColDef } from "@/components/Table/types";
-// import type { IActions } from "@/components/TableActions/types";
+import TableActions from "@/components/TableActions";
+import { useAuth } from "@/store/useAuth";
+import type { IFund } from "@/app/api/funds/get-funds/types";
+import type { TGridColDef } from "@/components/Table/types";
+import type { IActions } from "@/components/TableActions/types";
 
-export function GetColumns() {
-  // export function GetColumns({ onAction }: IActions) {
-  // const { isAdmin } = useAuth();
-  // const columns: GridColDef<IFunds>[] = [
-  const columns = [
+export function GetColumns({ onAction }: IActions) {
+  const { isAdmin } = useAuth();
+  const columns: TGridColDef<IFund>[] = [
     {
       field: "alias",
       label: "ALIAS",
@@ -24,14 +22,9 @@ export function GetColumns() {
       label: "TYPE",
     },
     {
-      field: "sector",
-      label: "SECTOR",
-    },
-    {
       field: "description",
       label: "DESCRIPTION",
-      // render(value) {
-      render(value: string) {
+      render(value) {
         return (
           <>
             <p
@@ -48,14 +41,14 @@ export function GetColumns() {
     },
   ];
 
-  // if (isAdmin) {
-  //   columns.push({
-  //     field: "actions" as keyof IFunds,
-  //     label: "ACTIONS",
-  //     valueGetter: (row) => row.alias,
-  //     render: (value) => <TableActions id={value as string} onAction={onAction} />,
-  //   });
-  // }
+  if (isAdmin) {
+    columns.push({
+      field: "actions" as keyof IFund,
+      label: "ACTIONS",
+      valueGetter: (row) => row.alias,
+      render: (value) => <TableActions id={value as string} onAction={onAction} />,
+    });
+  }
 
   return columns;
 }

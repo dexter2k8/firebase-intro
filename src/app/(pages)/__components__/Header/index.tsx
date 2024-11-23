@@ -22,6 +22,7 @@ export default function Header({ menuClick, label }: IHeaderProps) {
     const getUserData = async () => {
       const userData = await getUser();
       setValue("userId", userData?.uid);
+      setValue("isAdmin", userData?.role === "admin");
       setUser(userData);
       setLoading(false);
     };

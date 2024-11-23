@@ -20,6 +20,7 @@ export async function GET() {
       email: authenticated?.email as string,
       avatar: authenticated?.picture as string,
       uid: authenticated?.uid,
+      role: authenticated?.role,
     };
 
     return NextResponse.json(user, { status: 200 });

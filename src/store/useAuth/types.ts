@@ -8,6 +8,7 @@ export type TActions = {
 
 export type TState = {
   userId?: string;
+  isAdmin?: boolean;
 };
 
 export interface ISignInProps {
@@ -26,4 +27,5 @@ export interface IGetCurrentUser {
   email: string;
   avatar: string;
   uid: string;
+  role: string;
 }
