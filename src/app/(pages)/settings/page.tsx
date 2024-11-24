@@ -1,6 +1,7 @@
 "use client";
 import Tabs from "@/components/Tabs";
 import { useAuth } from "@/store/useAuth";
+import About from "./steps/About";
 import EditProfile from "./steps/EditProfile";
 import { ManageFunds } from "./steps/ManageFunds";
 import { ManageUsers } from "./steps/ManageUsers";
@@ -16,6 +17,7 @@ export default function Settings() {
     { key: 1, label: "Manage Funds", children: <ManageFunds /> },
   ];
   if (isAdmin) tabItems.push({ key: 2, label: "Manage Users", children: <ManageUsers /> });
+  tabItems.push({ key: 3, label: "About", children: <About /> });
 
   return (
     <div className={settings}>
