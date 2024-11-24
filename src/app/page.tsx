@@ -39,7 +39,7 @@ export default function SignIn() {
           <span>Funds Explorer</span>
         </div>
         <div className={item}>
-          <label htmlFor="password">Password</label>
+          <label htmlFor="password">Email</label>
           <Input.Controlled control={control} name="email" id="email" />
         </div>
         <div className={item}>
