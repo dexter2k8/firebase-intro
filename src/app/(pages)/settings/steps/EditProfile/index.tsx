@@ -40,7 +40,7 @@ export default function EditProfile() {
     const parsedData = password ? { password } : rest;
     try {
       setLoading(true);
-      const response = await api.patch("/api/auth/patch-user", parsedData);
+      const response = await api.patch(`/api/auth/patch-user/${selfUser?.uid}`, parsedData);
       mutate();
       setOpenModal(false);
       setLoading(false);
