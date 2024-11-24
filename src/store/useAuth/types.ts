@@ -3,7 +3,7 @@ export type TActions = {
   signIn: (data: ISignInProps) => Promise<boolean>;
   signUp: (data: ISignUpProps) => Promise<boolean>;
   signOut: () => Promise<boolean>;
-  getUser: () => Promise<IGetCurrentUser>;
+  getUser: () => Promise<IUser>;
 };
 
 export type TState = {
@@ -22,7 +22,7 @@ export interface ISignUpProps extends ISignInProps {
   confirmPassword: string;
 }
 
-export interface IGetCurrentUser {
+export interface IUser {
   name: string;
   email: string;
   avatar?: string;

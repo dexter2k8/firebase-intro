@@ -2,7 +2,7 @@ import { AxiosError } from "axios";
 import admin from "firebase-admin";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import type { IGetCurrentUser } from "@/store/useAuth/types";
+import type { IUser } from "@/store/useAuth/types";
 
 export async function GET() {
   const token = cookies().get("funds-explorer-token")?.value;
@@ -15,7 +15,7 @@ export async function GET() {
       return NextResponse.json({ message: "Not users found" }, { status: 401 });
     }
 
-    const users: IGetCurrentUser[] = listUsers.users.map((user) => ({
+    const users: IUser[] = listUsers.users.map((user) => ({
       uid: user.uid,
       email: user.email as string,
       name: user.displayName as string,

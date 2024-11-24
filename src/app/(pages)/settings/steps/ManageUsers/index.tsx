@@ -12,7 +12,7 @@ import { getColumns } from "./columns";
 import styles from "../../styles.module.scss";
 import UserModal from "./__components__/UserModal";
 import type { IActionsProps } from "@/components/TableActions/types";
-import type { IGetCurrentUser } from "@/store/useAuth/types";
+import type { IUser } from "@/store/useAuth/types";
 
 export function ManageUsers() {
   const [action, setAction] = useState<IActionsProps>();
@@ -20,7 +20,7 @@ export function ManageUsers() {
   const { head } = styles;
   const columns = getColumns({ onAction: setAction });
 
-  const { response: userList, isLoading, mutate } = useSWR<IGetCurrentUser[]>(API.AUTH.LIST_USERS);
+  const { response: userList, isLoading, mutate } = useSWR<IUser[]>(API.AUTH.LIST_USERS);
 
   const handleDelete = async () => {
     try {

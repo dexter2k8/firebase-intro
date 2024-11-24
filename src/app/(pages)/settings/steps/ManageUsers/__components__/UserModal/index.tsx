@@ -13,11 +13,11 @@ import styles from "./styles.module.scss";
 import type { SubmitHandler } from "react-hook-form";
 import type { IModalDefaultProps } from "@/components/Modal/types";
 import type { TAction } from "@/components/TableActions/types";
-import type { IGetCurrentUser } from "@/store/useAuth/types";
+import type { IUser } from "@/store/useAuth/types";
 
 interface IUserModalProps extends IModalDefaultProps {
   onMutate: () => void;
-  userData?: IGetCurrentUser;
+  userData?: IUser;
   action?: TAction;
 }
 
@@ -26,11 +26,11 @@ export default function UserModal({ open, userData, onClose, action, onMutate }:
   const [checked, setChecked] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const { control, handleSubmit, setValue, reset } = useForm<IGetCurrentUser>({
+  const { control, handleSubmit, setValue, reset } = useForm<IUser>({
     resolver: yupResolver(action === "add" ? schemaPost : schemaEdit),
   });
 
-  const onSubmit: SubmitHandler<IGetCurrentUser> = async (data) => {
+  const onSubmit: SubmitHandler<IUser> = async (data) => {
     setLoading(true);
     try {
       if (action === "add") await api.post("/api/auth/sign-up", data);

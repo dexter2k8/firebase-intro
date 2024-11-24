@@ -2,11 +2,11 @@ import { AxiosError } from "axios";
 import admin from "firebase-admin";
 import { cookies } from "next/headers";
 import { type NextRequest, NextResponse } from "next/server";
-import type { IGetCurrentUser } from "@/store/useAuth/types";
+import type { IUser } from "@/store/useAuth/types";
 import type { IUpdateUser } from "../types";
 
 export async function PATCH(req: NextRequest) {
-  const body: IGetCurrentUser = await req.json();
+  const body: IUser = await req.json();
 
   const parsedBody: IUpdateUser = {
     displayName: body.name,

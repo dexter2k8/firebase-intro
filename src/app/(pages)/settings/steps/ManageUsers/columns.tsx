@@ -2,10 +2,10 @@ import Image from "next/image";
 import TableActions from "@/components/TableActions";
 import type { TGridColDef } from "@/components/Table/types";
 import type { IActions } from "@/components/TableActions/types";
-import type { IGetCurrentUser } from "@/store/useAuth/types";
+import type { IUser } from "@/store/useAuth/types";
 
 export function getColumns({ onAction }: IActions) {
-  const columns: TGridColDef<IGetCurrentUser>[] = [
+  const columns: TGridColDef<IUser>[] = [
     {
       field: "name",
       label: "NAME",
@@ -36,7 +36,7 @@ export function getColumns({ onAction }: IActions) {
       },
     },
     {
-      field: "actions" as keyof IGetCurrentUser,
+      field: "actions" as keyof IUser,
       label: "ACTIONS",
       valueGetter: (row) => row.uid,
       render: (value) => <TableActions id={value as string} onAction={onAction} />,
