@@ -1,3 +1,6 @@
+@import "../../../../page.module.scss";
+
 .item {
+  @include formItem(100%);
   padding: 1rem;
 }
