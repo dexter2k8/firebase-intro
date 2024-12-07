@@ -2,73 +2,69 @@ import moment from "moment";
 import type { ITransaction } from "../../transactions/get-transactions/types";
 import type { IIncome } from "../get-incomes/types";
 
-interface IIncomeMonthlySums extends IIncome {
-  month_end?: string;
-}
-
-export function calculateMonthlySums(incomes: IIncome[], transactions: ITransaction[]) {
-  //gera o range de datas mensais entre initDate e endDate
-  const initDate = moment(incomes[incomes.length - 1].updated_at);
-  const endDate = moment(incomes[0].updated_at);
+export function calculateMonthlySums(
+  startDate: string,
+  incomes: IIncome[],
+  transactions: ITransaction[]
+) {
+  const initDate = moment(startDate).startOf("month");
+  const currentDate = moment(new Date());
+  const endDate = currentDate.subtract(1, "month").endOf("month").format("YYYY-MM-DD");
 
   const dateRange = [];
-
   while (initDate.isSameOrBefore(endDate, "month")) {
-    dateRange.push(initDate.format("YYYY-MM-DD"));
+    dateRange.push(initDate.format("YYYY-MM"));
     initDate.add(1, "month");
   }
 
-  // Etapa 1: LatestIncomesPerMonth - Seleciona a última data de atualização para cada fundo e mês
-  const latestIncomesPerMonth = dateRange.flatMap((monthStart) => {
-    const monthEnd = moment(monthStart).endOf("month").format("YYYY-MM-DD");
-
-    const monthIncomes = incomes.filter((income) => income.updated_at <= monthEnd);
-
-    const maxUpdatedIncomes = monthIncomes.reduce(
-      (acc: { [alias: string]: IIncomeMonthlySums }, curr) => {
-        if (!acc[curr.fund_alias] || acc[curr.fund_alias].updated_at < curr.updated_at) {
-          acc[curr.fund_alias] = { ...curr, month_end: monthEnd };
-        }
-        return acc;
-      },
-      {}
+  const monthlySums = dateRange.map((month) => {
+    const transactionsUpToDate = transactions.filter((t) =>
+      moment(t.bought_at).isSameOrBefore(month, "month")
     );
 
-    return Object.values(maxUpdatedIncomes);
-  });
+    const fundData: { [key: string]: { quantity: number; price: number; income: number } } = {};
 
-  // Etapa 2: MonthlySums - Calcular total_patrimony e total_income para cada mês e fundo
-  const monthlySums = dateRange.map((monthStart) => {
-    const yearMonth = moment(monthStart).format("YYYY-MM");
-    const monthEnd = moment(monthStart).endOf("month").format("YYYY-MM-DD");
+    transactionsUpToDate.forEach((transaction) => {
+      const { fund_alias, quantity, price, bought_at } = transaction;
 
-    // Calcula o total_patrimony e total_income para cada fundo no mês atual
-    let total_patrimony = 0;
-    let total_income = 0;
+      // Localiza o income mais próximo
+      const nearestIncome = incomes
+        .filter(
+          (i) => i.fund_alias === fund_alias && moment(i.updated_at).isSameOrBefore(month, "month")
+        )
+        .sort((a, b) => moment(b.updated_at).diff(moment(a.updated_at)))[0]; // Income mais recente até o mês atual
 
-    latestIncomesPerMonth.forEach((income) => {
-      if (income.month_end === monthEnd) {
-        // Filtra transactions até o fim do mês para obter a quantidade total
-        const quantity = transactions
-          .filter((trans) => trans.fund_alias === income.fund_alias)
-          .reduce((sum, trans) => sum + (trans.quantity || 0), 0);
+      // Filtra os incomes do mês para cada fundo
+      const monthlyIncomes = incomes.filter(
+        (i) => i.fund_alias === fund_alias && moment(i.updated_at).isSame(month, "month")
+      );
 
-        // Adiciona ao total_patrimony
-        total_patrimony += income.price * quantity;
+      if (!fundData[fund_alias]) {
+        fundData[fund_alias] = { quantity: 0, price, income: 0 }; // Primeiro registro
+      }
 
-        // Adiciona ao total_income apenas se o updated_at do income estiver no mês atual
-        const incomeYearMonth = moment(income.updated_at).format("YYYY-MM");
+      fundData[fund_alias].quantity += quantity;
+      fundData[fund_alias].income = monthlyIncomes.reduce((acc, i) => acc + i.income, 0);
 
-        if (incomeYearMonth === yearMonth) {
-          total_income += income.income;
-        }
+      // Atualiza o preço com base na comparação das datas
+      if (nearestIncome && moment(nearestIncome.updated_at).isAfter(bought_at)) {
+        fundData[fund_alias].price = nearestIncome.price;
+      } else {
+        fundData[fund_alias].price = price;
       }
     });
 
-    return { year_month: yearMonth, total_patrimony, total_income };
+    const total_patrimony = Object.values(fundData).reduce(
+      (acc, { quantity, price }) => acc + quantity * price,
+      0
+    );
+
+    const total_income = Object.values(fundData).reduce((acc, { income }) => acc + income, 0);
+
+    return { year_month: month, total_patrimony, total_income };
   });
 
-  return monthlySums.filter((monthly) => monthly.total_patrimony > 0 || monthly.total_income > 0);
+  return monthlySums;
 }
 
 export function getGain(final: number, initial: number) {

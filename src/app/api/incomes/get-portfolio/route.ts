@@ -1,5 +1,5 @@
 import { AxiosError } from "axios";
-import { collection, getDocs, orderBy, query, Timestamp, where } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import moment from "moment";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
@@ -16,11 +16,11 @@ export async function GET(req: NextRequest) {
   const searchParams = new URL(req.url);
   try {
     const type = searchParams.searchParams.get("type");
-    const initDate = searchParams.searchParams.get("initDate");
-    const endDate = searchParams.searchParams.get("endDate");
+    const currentDate = moment(new Date());
 
-    const parsedInitDate = Timestamp.fromDate(new Date(initDate ?? ""));
-    const parsedEndDate = Timestamp.fromDate(new Date(endDate ?? ""));
+    const initDate =
+      searchParams.searchParams.get("initDate") ||
+      currentDate.subtract(10, "year").format("YYYY-MM-DD");
 
     const token = cookies().get("funds-explorer-token")?.value;
     const uid = await validateUser(token);
@@ -31,13 +31,7 @@ export async function GET(req: NextRequest) {
     const transactionsRef = collection(db, "transactions");
 
     const qFunds = query(fundsRef, where("type", "==", type));
-    const qIncomes = query(
-      incomesRef,
-      where("user_id", "==", uid),
-      where("updated_at", ">=", parsedInitDate),
-      where("updated_at", "<=", parsedEndDate),
-      orderBy("updated_at", "desc")
-    );
+    const qIncomes = query(incomesRef, where("user_id", "==", uid), orderBy("updated_at", "desc"));
     const qTransactions = query(
       transactionsRef,
       where("user_id", "==", uid),
@@ -70,7 +64,7 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const profits = calculateMonthlySums(incomes, transactions);
+    const profits = calculateMonthlySums(initDate, incomes, transactions);
     const lastPatrimony = profits[profits.length - 1].total_patrimony;
     const previousPatrimony = profits[profits.length - 2].total_patrimony;
     const lastProfit = profits[profits.length - 1].total_income;

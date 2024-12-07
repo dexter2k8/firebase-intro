@@ -6,7 +6,7 @@ import SegmentedControl from "@/components/SegmentedControl";
 import Skeleton from "@/components/Skeleton";
 import { useSWR } from "@/hook/useSWR";
 import { API } from "@/utils/paths";
-import { endDate, getDate, patrimonyColors, profitColors, segmentedTypes } from "./types";
+import { getDate, patrimonyColors, profitColors, segmentedTypes } from "./types";
 import Card from "./__components__/Card";
 import Donut from "./__components__/Charts/Donut";
 import VerticalBars from "./__components__/Charts/VerticalBars";
@@ -26,7 +26,6 @@ export default function Dashboard() {
     API.INCOMES.GET_PORTFOLIO,
     {
       initDate: getDate(range),
-      endDate,
       type: type === 1 ? "" : segmentedTypes[type - 1].label,
     }
   );

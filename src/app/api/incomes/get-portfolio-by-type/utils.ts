@@ -1,9 +1,11 @@
 import moment from "moment";
 import type { IFund } from "../../funds/get-funds/types";
 import type { ITransaction } from "../../transactions/get-transactions/types";
+import type { TFundType } from "../../types";
 import type { IIncome } from "../get-incomes/types";
 
 interface IIncomeByType {
+  type: string;
   total_patrimony: number;
   total_income: number;
 }
@@ -13,73 +15,81 @@ export function calculatePatrimonyAndIncome(
   transactions: ITransaction[],
   funds: IFund[]
 ) {
-  // Etapa 1: Obter o registro mais recente de cada fund_alias em incomes
-  const latestIncomes = incomes.reduce((acc: { [alias: string]: IIncome }, curr) => {
-    if (
-      !acc[curr.fund_alias] ||
-      moment(acc[curr.fund_alias].updated_at).isBefore(curr.updated_at)
-    ) {
-      acc[curr.fund_alias] = curr;
-    }
-    return acc;
-  }, {});
-
-  // Encontrar o mês mais recente
-  const mostRecentIncome = Object.values(latestIncomes).reduce((max, current) => {
+  // Etapa 1: Obter o mês mais recente em incomes
+  const mostRecentIncome = incomes.reduce((max, current) => {
     const currentDate = moment(current.updated_at);
     if (currentDate.isAfter(max)) return currentDate;
 
     return max;
   }, moment("1970-01-01")); // inicializar com uma data antiga
 
-  // Transformar latestIncomes em um array e adicionar quantidade e monthly_income
-  const latestIncomesWithDetails = Object.values(latestIncomes).map((income) => {
-    // Calcular a quantidade total de transações até a data `updated_at` de income
-    const quantity = transactions
-      .filter((trans) => trans.fund_alias === income.fund_alias)
-      .reduce((sum, trans) => sum + (trans.quantity || 0), 0);
+  const transactionsUpToDate = transactions.filter((t) =>
+    moment(t.bought_at).isSameOrBefore(mostRecentIncome, "month")
+  );
 
-    // Calcular monthly_income do mês mais recente
-    const mostRecentMonth = mostRecentIncome.format("YYYY-MM");
-    const monthlyIncome = incomes
+  const fundData: {
+    [key: string]: { quantity: number; price: number; income: number; type: TFundType };
+  } = {};
+
+  transactions.sort((a, b) => moment(a.bought_at).diff(moment(b.bought_at)));
+
+  transactionsUpToDate.forEach((transaction) => {
+    const { fund_alias, quantity, price, bought_at } = transaction;
+
+    // Localiza o income mais próximo
+    const nearestIncome = incomes
       .filter(
-        (i2) =>
-          i2.fund_alias === income.fund_alias &&
-          moment(i2.updated_at).format("YYYY-MM") === mostRecentMonth
+        (i) =>
+          i.fund_alias === fund_alias &&
+          moment(i.updated_at).isSameOrBefore(mostRecentIncome, "month")
       )
-      .reduce((sum, i2) => sum + (i2.income || 0), 0);
+      .sort((a, b) => moment(b.updated_at).diff(moment(a.updated_at)))[0]; // Income mais recente até o mês atual
 
-    return {
-      ...income,
-      quantity,
-      monthly_income: monthlyIncome,
-    };
+    // Filtra os incomes do mês para cada fundo
+    const monthlyIncomes = incomes.filter(
+      (i) => i.fund_alias === fund_alias && moment(i.updated_at).isSame(mostRecentIncome, "month")
+    );
+
+    if (!fundData[fund_alias]) {
+      fundData[fund_alias] = {
+        quantity: 0,
+        price,
+        income: 0,
+        type: funds.find((f) => f.alias === fund_alias)?.type as TFundType,
+      }; // Primeiro registro
+    }
+
+    fundData[fund_alias].quantity += quantity;
+    fundData[fund_alias].income = monthlyIncomes.reduce((acc, i) => acc + i.income, 0);
+
+    // Atualiza o preço com base na comparação das datas
+    if (nearestIncome && moment(nearestIncome.updated_at).isAfter(bought_at)) {
+      fundData[fund_alias].price = nearestIncome.price;
+    } else {
+      fundData[fund_alias].price = price;
+    }
   });
 
-  // Etapa 2: Agrupar por tipo de fundo e calcular total_patrimony e total_income
-  const result = latestIncomesWithDetails.reduce(
-    (acc: { [alias: string]: IIncomeByType }, income) => {
-      const fund = funds.find((f) => f.alias === income.fund_alias);
+  const resultByType = Object.values(fundData).reduce(
+    (acc: IIncomeByType[], curr) => {
+      const patrimonyValue = curr.quantity * curr.price;
+      const incomeValue = curr.income;
 
-      if (fund) {
-        const fundType = fund.type;
-        if (!acc[fundType]) {
-          acc[fundType] = { total_patrimony: 0, total_income: 0 };
-        }
-
-        acc[fundType].total_patrimony += income.price * income.quantity;
-        acc[fundType].total_income += income.monthly_income;
+      // Find or create the entry for the current type
+      let item = acc.find((entry) => entry.type === curr.type);
+      if (!item) {
+        item = { type: curr.type, total_patrimony: 0, total_income: 0 };
+        acc.push(item);
       }
+
+      // Update patrimony and income
+      item.total_patrimony += patrimonyValue;
+      item.total_income += incomeValue;
 
       return acc;
     },
-    {}
+    [] // Initial accumulator as an empty array
   );
 
-  // Formatar resultado em um array
-  return Object.keys(result).map((type) => ({
-    type,
-    total_patrimony: result[type].total_patrimony,
-    total_income: result[type].total_income,
-  }));
+  return resultByType;
 }
