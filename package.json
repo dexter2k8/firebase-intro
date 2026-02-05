@@ -31,7 +31,7 @@
     "react-tooltip": "^5.28.0",
     "swr": "^2.2.5",
     "xlsx": "^0.18.5",
-    "yahoo-finance2": "^2.13.2",
+    "yahoo-finance2": "^3.13.0",
     "yup": "^1.4.0",
     "zustand": "^5.0.0"
   },

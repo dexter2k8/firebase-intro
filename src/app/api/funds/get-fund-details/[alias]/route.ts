@@ -1,13 +1,14 @@
 import { AxiosError } from "axios";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import yahooFinance from "yahoo-finance2";
+import YahooFinance from "yahoo-finance2";
 import { validateUser } from "@/utils/lib";
 import type { NextRequest } from "next/server";
 import type { IFundDetails, IFundDetailsResponse } from "./types";
 
 export async function GET(req: NextRequest) {
   try {
+    const yahooFinance = new YahooFinance();
     const token = cookies().get("funds-explorer-token")?.value;
     const uid = await validateUser(token);
     if (!uid) return NextResponse.json("Invalid token", { status: 401 });
