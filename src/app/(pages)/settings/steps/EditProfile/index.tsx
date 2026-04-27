@@ -9,7 +9,8 @@ import Input from "@/components/Input";
 import { useSWR } from "@/hook/useSWR";
 import schema from "@/schemas/validateEditProfile";
 import api from "@/services/api";
-import { API } from "@/utils/paths";
+import { useAuth } from "@/store/useAuth";
+import { API, DEMO_USER } from "@/utils/paths";
 import ChangePasswordModal from "./__components__/ChangePasswordModal";
 import styles from "./styles.module.scss";
 import type { SubmitHandler } from "react-hook-form";
@@ -18,6 +19,7 @@ import type { IEditProfileProps } from "./types";
 
 export default function EditProfile() {
   const { form, item } = styles;
+  const { userId } = useAuth();
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const { control, setValue, watch, handleSubmit } = useForm<IEditProfileProps>({
@@ -25,6 +27,8 @@ export default function EditProfile() {
   });
 
   const { response: selfUser, mutate } = useSWR<IUser>(API.AUTH.GET_USER);
+
+  const isDemoUser = userId === DEMO_USER;
 
   useEffect(() => {
     if (selfUser) {
@@ -60,9 +64,14 @@ export default function EditProfile() {
     setValue("confirmPassword", undefined);
   };
 
+  const demoUserStyles = {
+    opacity: 0.5,
+    pointerEvents: "none",
+  } as React.CSSProperties;
+
   return (
     <>
-      <center>
+      <center style={isDemoUser ? demoUserStyles : {}}>
         <form className={form} onSubmit={handleSubmit(onSubmit)}>
           <div className={item}>
             <label htmlFor="name">Name</label>

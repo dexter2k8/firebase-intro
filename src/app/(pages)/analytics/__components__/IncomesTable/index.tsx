@@ -7,6 +7,8 @@ import ExportCSV from "@/app/(pages)/__components__/CsvExport";
 import Modal from "@/components/Modal";
 import Table from "@/components/Table";
 import api from "@/services/api";
+import { useAuth } from "@/store/useAuth";
+import { DEMO_USER } from "@/utils/paths";
 import { getColumns } from "./columns";
 import IncomeModal from "./__components__/IncomeModal";
 import styles from "./styles.module.scss";
@@ -21,10 +23,13 @@ export default function IncomesTable({
   fund_alias,
   fundValue,
 }: IIncomesTableProps) {
+  const { userId } = useAuth();
   const [action, setAction] = useState<IActionsProps>();
   const [loading, setLoading] = useState(false);
   const { table_container, head, table_content } = styles;
   const columns = getColumns({ onAction: setAction });
+
+  const isDemoUser = userId === DEMO_USER;
 
   const handleDelete = async () => {
     try {
@@ -48,11 +53,13 @@ export default function IncomesTable({
           <h4>Incomes Table</h4>
           <div className={head}>
             <ExportCSV table="incomes" fileName="incomes.csv" />
-            <CiSquarePlus
-              size="2rem"
-              onClick={() => setAction({ action: "add", id: undefined })}
-              style={{ cursor: "pointer" }}
-            />
+            {!isDemoUser && (
+              <CiSquarePlus
+                size="2rem"
+                onClick={() => setAction({ action: "add", id: undefined })}
+                style={{ cursor: "pointer" }}
+              />
+            )}
           </div>
         </div>
         <Table isLoading={isLoadingProfits} columns={columns} rows={profits || []} pageSize={12} />

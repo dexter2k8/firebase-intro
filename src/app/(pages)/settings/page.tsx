@@ -16,8 +16,9 @@ export default function Settings() {
     { key: 0, label: "Edit profile", children: <EditProfile /> },
     { key: 1, label: "Manage Funds", children: <ManageFunds /> },
   ];
+  const aboutTabKey = isAdmin ? 3 : 2;
   if (isAdmin) tabItems.push({ key: 2, label: "Manage Users", children: <ManageUsers /> });
-  tabItems.push({ key: 3, label: "About", children: <About /> });
+  tabItems.push({ key: aboutTabKey, label: "About", children: <About /> });
   return (
     <div className={settings}>
       <main>

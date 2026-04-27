@@ -34,3 +34,5 @@ export const API = {
     DELETE_INCOME: "/api/incomes/delete-income/",
   },
 };
+
+export const DEMO_USER = "69T8YNolF3hd9yIKgHxnjQUjfXp2";
