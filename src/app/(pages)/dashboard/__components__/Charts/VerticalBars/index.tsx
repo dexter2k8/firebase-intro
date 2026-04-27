@@ -22,7 +22,7 @@ export default function VerticalBars({ data = [], selectedRange, isLoading }: IV
       <LayoutCharts
         title="Portfolio over time"
         sideControls={
-          <SegmentedControl onSelect={selectedRange} defaultSelected={3} items={segmentedRange} />
+          <SegmentedControl onSelect={selectedRange} defaultSelected={0} items={segmentedRange} />
         }
       >
         {isLoading ? (

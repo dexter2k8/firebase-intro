@@ -3,13 +3,25 @@ import type { ITransaction } from "../../transactions/get-transactions/types";
 import type { IIncome } from "../get-incomes/types";
 
 export function calculateMonthlySums(
-  startDate: string,
+  startDate: string | null,
   incomes: IIncome[],
-  transactions: ITransaction[]
+  transactions: ITransaction[],
 ) {
-  const initDate = moment(startDate).startOf("month");
   const currentDate = moment(new Date());
-  const endDate = currentDate.subtract(1, "month").endOf("month").format("YYYY-MM-DD");
+  if (incomes.length === 0)
+    return [{ year_month: currentDate.format("YYYY-MM"), total_patrimony: 0, total_income: 0 }];
+
+  const firstIncomeDate = incomes[incomes.length - 1].updated_at;
+  const lastIncomeDate = incomes[0].updated_at;
+  const twelveMonthsAgo = moment(lastIncomeDate).subtract(11, "month").format("YYYY-MM-DD");
+
+  const firstDate = moment(twelveMonthsAgo).isSameOrBefore(firstIncomeDate)
+    ? firstIncomeDate
+    : twelveMonthsAgo;
+
+  const initDate = moment(startDate || firstDate).startOf("month");
+  const previousMonthDate = currentDate.subtract(1, "month").endOf("month").format("YYYY-MM-DD");
+  const endDate = startDate ? previousMonthDate : lastIncomeDate;
 
   const dateRange = [];
   while (initDate.isSameOrBefore(endDate, "month")) {
@@ -19,7 +31,7 @@ export function calculateMonthlySums(
 
   const monthlySums = dateRange.map((month) => {
     const transactionsUpToDate = transactions.filter((t) =>
-      moment(t.bought_at).isSameOrBefore(month, "month")
+      moment(t.bought_at).isSameOrBefore(month, "month"),
     );
 
     const fundData: { [key: string]: { quantity: number; price: number; income: number } } = {};
@@ -30,13 +42,13 @@ export function calculateMonthlySums(
       // Localiza o income mais próximo
       const nearestIncome = incomes
         .filter(
-          (i) => i.fund_alias === fund_alias && moment(i.updated_at).isSameOrBefore(month, "month")
+          (i) => i.fund_alias === fund_alias && moment(i.updated_at).isSameOrBefore(month, "month"),
         )
         .sort((a, b) => moment(b.updated_at).diff(moment(a.updated_at)))[0]; // Income mais recente até o mês atual
 
       // Filtra os incomes do mês para cada fundo
       const monthlyIncomes = incomes.filter(
-        (i) => i.fund_alias === fund_alias && moment(i.updated_at).isSame(month, "month")
+        (i) => i.fund_alias === fund_alias && moment(i.updated_at).isSame(month, "month"),
       );
 
       if (!fundData[fund_alias]) {
@@ -56,7 +68,7 @@ export function calculateMonthlySums(
 
     const total_patrimony = Object.values(fundData).reduce(
       (acc, { quantity, price }) => acc + quantity * price,
-      0
+      0,
     );
 
     const total_income = Object.values(fundData).reduce((acc, { income }) => acc + income, 0);

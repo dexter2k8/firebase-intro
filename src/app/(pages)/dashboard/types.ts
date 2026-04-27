@@ -11,9 +11,10 @@ export const segmentedTypes: ISegmentedControlItem[] = [
 ];
 
 export const segmentedRange: ISegmentedControlItem[] = [
-  { key: 1, label: "6M" },
-  { key: 2, label: "12M" },
-  { key: 3, label: "YTD" },
+  { key: 0, label: "LPD", description: "Last Performance Date" },
+  { key: 1, label: "6M", description: "Last 6 Months" },
+  { key: 2, label: "12M", description: "Last 12 Months" },
+  { key: 3, label: "YTD", description: "Year To Date" },
 ];
 
 const currentDate = dayjs(new Date());

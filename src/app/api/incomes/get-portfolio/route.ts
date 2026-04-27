@@ -16,11 +16,9 @@ export async function GET(req: NextRequest) {
   const searchParams = new URL(req.url);
   try {
     const type = searchParams.searchParams.get("type");
-    const currentDate = moment(new Date());
 
-    const initDate =
-      searchParams.searchParams.get("initDate") ||
-      currentDate.subtract(10, "year").format("YYYY-MM-DD");
+    const paramDate = searchParams.searchParams.get("initDate");
+    const initDate = paramDate !== "undefined" ? paramDate : null;
 
     const token = cookies().get("funds-explorer-token")?.value;
     const uid = await validateUser(token);
@@ -35,7 +33,7 @@ export async function GET(req: NextRequest) {
     const qTransactions = query(
       transactionsRef,
       where("user_id", "==", uid),
-      orderBy("bought_at", "desc")
+      orderBy("bought_at", "desc"),
     );
 
     const incomesDoc = await getDocs(qIncomes);
@@ -60,7 +58,7 @@ export async function GET(req: NextRequest) {
       const funds = fundsDoc?.docs.map((doc) => ({ alias: doc.id })) as IFund[];
       incomes = incomes.filter((income) => funds.some((fund) => fund.alias === income.fund_alias));
       transactions = transactions.filter((transaction) =>
-        funds.some((fund) => fund.alias === transaction.fund_alias)
+        funds.some((fund) => fund.alias === transaction.fund_alias),
       );
     }
 

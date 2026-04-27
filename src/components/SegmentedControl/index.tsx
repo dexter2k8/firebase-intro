@@ -1,10 +1,12 @@
 "use client";
-import { createRef, useEffect, useState } from "react";
+import { createRef, Fragment, useEffect, useState } from "react";
+import { Tooltip } from "react-tooltip";
 import classes from "./styles.module.css";
 
 export interface ISegmentedControlItem {
   key: number;
   label: React.ReactNode;
+  description?: string;
 }
 
 interface ISegmentedControlProps {
@@ -44,15 +46,19 @@ export default function SegmentedControl({
   return (
     <ul className={controlList} data-variant={variant} ref={segmentRef}>
       {items.map((item) => (
-        <li
-          key={item.key}
-          className={controlItem}
-          data-active={active === item.key}
-          ref={active === item.key ? activeRef : undefined}
-          onClick={() => setActive(item.key)}
-        >
-          {item.label}
-        </li>
+        <Fragment key={item.key}>
+          <li
+            className={controlItem}
+            data-active={active === item.key}
+            data-tooltip-id="segmented-tooltip"
+            data-tooltip-content={item.description}
+            ref={active === item.key ? activeRef : undefined}
+            onClick={() => setActive(item.key)}
+          >
+            {item.label}
+          </li>
+          <Tooltip id="segmented-tooltip" style={{ maxWidth: "18rem" }} />
+        </Fragment>
       ))}
     </ul>
   );
