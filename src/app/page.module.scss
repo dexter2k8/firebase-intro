@@ -45,6 +45,19 @@
 
     .item {
       @include formItem(18rem);
+      position: relative;
+      .help {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        border: 1px solid var(--dark-grey);
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        bottom: 4px;
+        right: 4px;
+        cursor: help;
+      }
     }
     button {
       width: 18rem;

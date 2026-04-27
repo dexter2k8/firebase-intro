@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Link from "next/link";
+// import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { Tooltip } from "react-tooltip";
 import Button from "@/components/Button";
 import Input from "@/components/Input";
 import schema from "@/schemas/validateLogin";
@@ -18,7 +19,7 @@ export interface ISignInProps {
 }
 
 export default function SignIn() {
-  const { main, container, head, item } = styles;
+  const { main, container, head, item, help } = styles;
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const { signIn } = useAuth();
@@ -41,6 +42,14 @@ export default function SignIn() {
         <div className={item}>
           <label htmlFor="password">Email</label>
           <Input.Controlled control={control} name="email" id="email" />
+          <span
+            className={help}
+            data-tooltip-id="help-tooltip"
+            data-tooltip-content="For demo: email:user@mail.com password:123456"
+          >
+            ?
+          </span>
+          <Tooltip id="help-tooltip" style={{ maxWidth: "14rem" }} />
         </div>
         <div className={item}>
           <label htmlFor="password">Password</label>
@@ -49,7 +58,7 @@ export default function SignIn() {
         <Button loading={loading} size="large" variant="primary">
           Sign In
         </Button>
-        <Link href="/sign-up">Create an account</Link>
+        {/* <Link href="/sign-up">Create an account</Link> */}
       </form>
     </main>
   );
